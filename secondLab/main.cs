@@ -1,140 +1,155 @@
 using System;
+using System.Text;
 
-class Program
-{
+namespace Lab2Variant2 {
 
-    static bool isRunning = true;
-
-    static double parsing(char num)
+    class Program
     {
-
-        Console.WriteLine($"Введите число {num}: ");
-        while (!double.TryParse(Console.ReadLine(), out double n))
+    
+        static bool isRunning = true;
+    
+        static double DoubleParsing(string message)
         {
-            Console.WriteLine($"\nВведите число {num}: ");
-        }
+            double n;
 
-        return n;
-    }
-
-    static void firstlab()
-    {
-        // 1 пункт
-        const double E = Math.E;
-        const double PI = Math.PI;
-
-        double a, b;
-
-        // 2 пункт
-        Console.Clear();
-
-        a = parsing('a');
-        b = parsing('b');
-
-        // 3 пункт
-        double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1));
-
-        if ((Math.Sin(a) + 1) == 0)
-        {
-            Console.WriteLine("Деление на ноль невозможно"); 
-        }
-        else
-        {
-            Console.WriteLine($"\nОтвет: {Math.Round(task2, 2)}");
-        }
-
-
-        // End
-        Console.WriteLine("\nНажмите любую клавишу для завершения программы ...");
-        Console.ReadKey();
-    }
-
-    static void showMenu() {
-        Console.Clear();
-        Console.WriteLine("1. Отгадай ответ");
-        Console.WriteLine("2. Об авторе");
-        Console.WriteLine("3. Выход");
-        Console.Write("Ваш выбор: ");
-    }
-
-    static void guessAnswer() {
-        Console.WriteLine("f = π(ln b^5 / sin(a) + 1)");
-        Console.WriteLine("Ваш ответ: ");
-        string? temp = Console.ReadLine("");
-        int guess = int.Parse(temp);
-
-        Console.Clear();
-        firstlab();
-    }
-
-    static void aboutAuthor() {
-        Console.Clear();
-        Console.WriteLine("Сделал Рахматулин Родион");
-        Console.WriteLine("6105-090301 группа\n");
-        Console.WriteLine("Нажмите Enter, чтобы вернуться в меню...");
-        Console.ReadLine();
-    }
-
-    static void exit() {
-        bool runnable = true;
-
-        while (runnable)
-        {
-            Console.Clear();
-            Console.Write("Вы действительно хотите выйти? [Y/n]: ");
-            string confirm = Console.ReadLine()?.ToLower();
-
-            if (confirm == "д" || confirm == "y"
-                    || confirm == "" )
+            Console.WriteLine(message);
+            while (!double.TryParse(Console.ReadLine(), out n))
             {
-                isRunning = false;
-                runnable = false;
-                Console.Clear();
+                Console.WriteLine(message);
             }
-            else if (confirm == "н" || confirm == "n")
+    
+            return n;
+        }
+
+        static double FirstLab()
+        {
+    
+            const double PI = Math.PI;
+            double a, b;
+    
+            a = DoubleParsing("Введите число a: ");
+            b = DoubleParsing("Введите число b: ");
+    
+            // 3 пункт
+            double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
+    
+            if ((Math.Sin(a) + 1) == 0)
             {
-                Console.Clear();
-                runnable = false;
+                Console.WriteLine("Деление на ноль невозможно"); 
             }
             else
             {
-                Console.WriteLine("Принимаются только символы 'д' и 'н'");
+                Console.WriteLine($"\nОтвет: {Math.Round(task2, 2)}");
+            }
+    
+            return task2;
+        }
+    
+        static void ShowMenu() 
+        {
+            Console.Clear();
+            Console.WriteLine("1. Отгадай ответ");
+            Console.WriteLine("2. Об авторе");
+            Console.WriteLine("3. Выход");
+            Console.Write("Ваш выбор: ");
+        }
+    
+        static void GuessAnswer() 
+        {
+            Console.Clear();
+            Console.WriteLine("Решите\nf = π(ln b^5 / sin(a) + 1)");
+            Console.Write("Ваш ответ(с округлением до двух знаков после запятой): ");
+    
+            double guess = DoubleParsing("");
+            double answer = FirstLab();
+    
+            if (guess == answer)
+            {
+                Console.WriteLine("Абсолютно верно!");
+            }
+            else
+            {
+                Console.WriteLine("Вы не угадали:(");
+            }
+    
+            Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
+            Console.ReadLine();
+        }
+    
+        static void AboutAuthor()
+        {
+            Console.Clear();
+            Console.WriteLine("Сделал Рахматулин Родион");
+            Console.WriteLine("6105-090301D группа\n");
+            Console.WriteLine("Нажмите Enter, чтобы вернуться в меню...");
+            Console.ReadLine();
+        }
+    
+        static void Exit()
+        {
+            bool runnable = true;
+    
+            while (runnable)
+            {
+                Console.Clear();
+                Console.Write("Вы действительно хотите выйти? [Y/n]: ");
+                string confirm = Console.ReadLine()?.ToLower();
+    
+                if (confirm == "д" || confirm == "y"
+                        || confirm == "" )
+                {
+                    isRunning = false;
+                    runnable = false;
+                    Console.Clear();
+                }
+                else if (confirm == "н" || confirm == "n")
+                {
+                    Console.Clear();
+                    runnable = false;
+                }
+                else
+                {
+                    Console.WriteLine("Принимаются только символы 'д' и 'н'");
+                }
             }
         }
-    }
-
-    static void run()
-    {
-        showMenu();
-
-        string choice = Console.ReadLine(); 
-
-        switch (choice)
+    
+        static void Run()
         {
-            case "1":
-                guessAnswer();
-                break;
-
-            case "2":
-                aboutAuthor();
-                break;
-
-            case "3":
-                exit();
-                break;
-
-            default:
-                Console.Clear();
-                Console.WriteLine("Нет такого варианта\n");
-                break;
+            ShowMenu();
+    
+            string choice = Console.ReadLine(); 
+    
+            switch (choice)
+            {
+                case "1":
+                    GuessAnswer();
+                    break;
+    
+                case "2":
+                    AboutAuthor();
+                    break;
+    
+                case "3":
+                    Exit();
+                    break;
+    
+                default:
+                    Console.Clear();
+                    Console.WriteLine("Нет такого варианта\n");
+                    break;
+            }
         }
-    }
-
-    static void Main(string[] args)
-    {
-        while(isRunning)
+    
+        static void Main()
         {
-            run();
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding  = Encoding.UTF8;
+    
+            while(isRunning)
+            {
+                Run();
+            }
         }
     }
 }
