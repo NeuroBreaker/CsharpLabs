@@ -30,7 +30,6 @@ namespace Lab2Variant2 {
             a = DoubleParsing("Введите число a: ");
             b = DoubleParsing("Введите число b: ");
     
-            // 3 пункт
             double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
     
             if ((Math.Sin(a) + 1) == 0)
