@@ -6,8 +6,9 @@ namespace Lab2Variant2 {
     class Program
     {
     
-        static bool isRunning = true;
+        static bool isRunning = true; // Глобальная переменная для главного цикла
     
+        // Запрашивает ввод у пользователя и парсит его в double тип
         static double DoubleParsing(string message)
         {
             double result;
@@ -21,7 +22,6 @@ namespace Lab2Variant2 {
             return result;
         }
 
-        // Доп задания 
         static void BoolHandler(bool boolean)
         {
 
@@ -45,20 +45,61 @@ namespace Lab2Variant2 {
             Console.Write("Ваш выбор: ");
         }
     
+        // Часть кода из первой лабораторной работы
+        static double FirstLab()
+        {
+    
+            const double PI = Math.PI;
+            double a, b;
+    
+            Console.WriteLine("Задача:\nf = π(ln b^5 / sin(a) + 1)");
+            a = DoubleParsing("Введите число a: ");
+            b = DoubleParsing("Введите число b: ");
+    
+            double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
+    
+            if ((Math.Sin(a) + 1) == 0)
+            {
+                Console.WriteLine("Деление на ноль невозможно"); 
+                Console.WriteLine("\nПопробуйте снова");
+                Console.ReadKey();
+
+                return FirstLab();
+            }
+            else
+            {
+                return task2;
+            }
+        }
+
         static void GuessAnswer() 
         {
             Console.Clear();
-            Console.WriteLine("Решите\nf = π(ln b^5 / sin(a) + 1)");
     
-            double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
             double answer = FirstLab();
-    
-            BoolHandler(guess == answer);
-    
+
+            int i;
+            for (i = 3; i > 0; i--) 
+            {
+                Console.WriteLine($"Количество попыток: {i}");
+                double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
+                if (guess == answer)
+                {
+                    BoolHandler(true);
+                    i = 0;
+                }
+                else
+                {
+                    BoolHandler(false);
+                }
+            }
+
+            Console.WriteLine($"\nОтвет: {Math.Round(answer, 2)}");
             Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
             Console.ReadKey();
         }
 
+        // Генерация задачи
         static void GenerateTask(out double result)
         {
             Random rand1 = new Random();
@@ -120,28 +161,6 @@ namespace Lab2Variant2 {
             Console.ReadKey();
         }
 
-        static double FirstLab()
-        {
-    
-            const double PI = Math.PI;
-            double a, b;
-    
-            a = DoubleParsing("Введите число a: ");
-            b = DoubleParsing("Введите число b: ");
-    
-            double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
-    
-            if ((Math.Sin(a) + 1) == 0)
-            {
-                Console.WriteLine("Деление на ноль невозможно"); 
-            }
-            else
-            {
-                Console.WriteLine($"\nОтвет: {Math.Round(task2, 2)}");
-            }
-    
-            return task2;
-        }
     
     
         static void AboutAuthor()
