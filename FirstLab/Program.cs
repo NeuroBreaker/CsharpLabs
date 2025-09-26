@@ -1,25 +1,26 @@
-using System;
+﻿using System;
 
 class Program
 {
 
-    static double parsing(char num)
+    static double DoubleParsing(string message)
     {
+        double result;
 
-        Console.WriteLine($"Введите число {num}: ");
-        while (!double.TryParse(Console.ReadLine(), out double n))
+        Console.Write(message);
+        while (!double.TryParse(Console.ReadLine(), out result))
         {
-            Console.WriteLine($"\nВведите число {num}: ");
+            Console.Write(message);
         }
-
-        return n;
-    }
     
+        return result;
+    }
+
     static void Main(string[] args)
     {
 
         // 1 пункт
-        const double E = Math.E;
+        // const double E = Math.E;
         const double PI = Math.PI;
 
         double a, b;
@@ -27,14 +28,14 @@ class Program
         // 2 пункт
         Console.Clear();
 
-        a = parsing('a');
-        b = parsing('b');
+        a = DoubleParsing("Введите число a: ");
+        b = DoubleParsing("Введите число b: ");
 
         // 3 пункт
         double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1));
 
         // 4 пункт
-        Console.WriteLine($"\nВторой вариант: {Math.Round(task2, 2)}");
+        Console.WriteLine($"\nОтвет на второй вариант: {Math.Round(task2, 2)}");
 
         // End
         Console.WriteLine("\nНажмите любую клавишу для завершения программы ...");
