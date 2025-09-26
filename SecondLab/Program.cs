@@ -83,7 +83,7 @@ namespace Lab2Variant2 {
             {
                 Console.WriteLine($"Количество попыток: {i}");
                 double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
-                if (guess == answer)
+                if (guess == Math.Round(answer, 2))
                 {
                     BoolHandler(true);
                     i = 0;
