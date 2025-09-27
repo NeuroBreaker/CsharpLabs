@@ -46,7 +46,7 @@ namespace Lab2Variant2 {
         }
     
         // Часть кода из первой лабораторной работы
-        static double FirstLab()
+        static double CalculateMethod()
         {
     
             const double PI = Math.PI;
@@ -64,7 +64,7 @@ namespace Lab2Variant2 {
                 Console.WriteLine("\nПопробуйте снова");
                 Console.ReadKey();
 
-                return FirstLab();
+                return CalculateMethod();
             }
             else
             {
@@ -76,7 +76,7 @@ namespace Lab2Variant2 {
         {
             Console.Clear();
     
-            double answer = FirstLab();
+            double answer = CalculateMethod();
 
             int i;
             for (i = 3; i > 0; i--) 
@@ -161,8 +161,6 @@ namespace Lab2Variant2 {
             Console.ReadKey();
         }
 
-    
-    
         static void AboutAuthor()
         {
             Console.Clear();
