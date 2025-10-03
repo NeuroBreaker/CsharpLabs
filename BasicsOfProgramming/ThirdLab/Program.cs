@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Lab2Variant2 {
+namespace Lab3Variant2 {
 
     class Program
     {

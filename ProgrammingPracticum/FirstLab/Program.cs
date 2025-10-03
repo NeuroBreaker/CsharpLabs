@@ -3,12 +3,12 @@
 
     static bool isRunning = true;
 
-    static int IntegerParsing(string message)
+    static double DoubleParsing(string message)
     {
-        int result = 0;
+        double result = 0;
 
         Console.Write(message);
-        while (!int.TryParse(Console.ReadLine(), out result))
+        while (!double.TryParse(Console.ReadLine(), out result))
         {
             Console.Write(message);
         }
@@ -21,19 +21,19 @@
     {
         Console.Clear();
 
-        int perDay = IntegerParsing("Введите ваш оклад за один день: ");
-        int workingDays = IntegerParsing("Введите количество отработанных дней: ");
-        int workingNights = IntegerParsing("Введите количество ночных смен: ");
-        int overtime = IntegerParsing("Введите количество отработанных сверхурочных часов: ");
+        double perDay = DoubleParsing("Введите ваш оклад за один день: ");
+        double workingDays = DoubleParsing("Введите количество отработанных дней: ");
+        double workingNights = DoubleParsing("Введите количество ночных смен: ");
+        double overtime = DoubleParsing("Введите количество отработанных сверхурочных часов: ");
 
-        decimal finnalySalary = 0;
+        double finnalySalary = 0;
 
         workingDays -= workingNights;
         finnalySalary += workingDays * perDay;
-        finnalySalary += workingNights * (perDay * 1.2m);
+        finnalySalary += workingNights * (perDay * 1.2);
         finnalySalary += overtime * 300;
         // Налог
-        finnalySalary *= 0.83m;
+        finnalySalary *= 0.83;
 
         Console.WriteLine($"Ваша итоговая зарплата: {finnalySalary}");
 
@@ -57,12 +57,12 @@
     {
         Console.Clear();
 
-        int distance = IntegerParsing("Расстояние в км: ");
-        decimal averageFuelUsage = IntegerParsing("Средний расход топлива на 100км: ");
-        decimal pricePerLiter = IntegerParsing("Цена за литр: ");
+        double distance = DoubleParsing("Расстояние в км: ");
+        double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
+        double pricePerLiter = DoubleParsing("Цена за литр: ");
 
-        decimal fuelUsage = distance * (averageFuelUsage / 100m);
-        decimal result = fuelUsage * pricePerLiter;
+        double fuelUsage = distance * (averageFuelUsage / 100);
+        double result = fuelUsage * pricePerLiter;
 
         Console.WriteLine($"Цена поездки обойдётся в {result}");
 
