@@ -62,13 +62,14 @@ namespace Lab2Variant2 {
             {
                 Console.WriteLine("Деление на ноль невозможно"); 
                 Console.WriteLine("\nПопробуйте снова");
+                Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                 Console.ReadKey();
 
                 return CalculateMethod();
             }
             else
             {
-                return task2;
+                return Math.Round(task2, 2);
             }
         }
 
@@ -83,7 +84,7 @@ namespace Lab2Variant2 {
             {
                 Console.WriteLine($"Количество попыток: {i}");
                 double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
-                if (guess == Math.Round(answer, 2))
+                if (guess == answer)
                 {
                     BoolHandler(true);
                     i = 0;
@@ -94,25 +95,23 @@ namespace Lab2Variant2 {
                 }
             }
 
-            Console.WriteLine($"\nОтвет: {Math.Round(answer, 2)}");
-            Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
+            Console.WriteLine($"\nОтвет: {answer}");
+            Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
 
         // Генерация задачи
         static void GenerateTask(out double result)
         {
-            Random rand1 = new Random();
-            Random rand2 = new Random();
-            Random rand3 = new Random();
+            Random random = new Random();
             
-            int num1 = rand1.Next(1, 10); 
-            int num2 = rand2.Next(1, 10); 
-            int num3 = rand3.Next(1, 5);
+            int num1 = random.Next(1, 10); 
+            int num2 = random.Next(1, 10); 
+            int operation = random.Next(1, 5);
 
             result = 0;
 
-            switch (num3)
+            switch (operation)
             {
                 case 1: 
                     Console.WriteLine($"Решите задачу: {num1} + {num2}");
@@ -157,7 +156,7 @@ namespace Lab2Variant2 {
             }
 
             Console.WriteLine($"Количество правильных ответов: {result}");
-            Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
+            Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
 
@@ -166,7 +165,7 @@ namespace Lab2Variant2 {
             Console.Clear();
             Console.WriteLine("Сделал Рахматулин Родион");
             Console.WriteLine("группа 6105-090301D");
-            Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
+            Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
     
@@ -197,7 +196,7 @@ namespace Lab2Variant2 {
                     Console.WriteLine("\nВведите либо y, либо n, либо д, либо н.");
                     Console.WriteLine("Другие варианты не примаются");
 
-                    Console.WriteLine("\nНажмите Enter, чтобы вернуться к выбору ...");
+                    Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                     Console.ReadKey();
                 }
             }
@@ -229,7 +228,9 @@ namespace Lab2Variant2 {
     
                 default:
                     Console.Clear();
-                    Console.WriteLine("Нет такого варианта\n");
+                    Console.WriteLine("Соответствия не найдено");
+                    Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
+                    Console.ReadLine();
                     break;
             }
         }
@@ -244,6 +245,10 @@ namespace Lab2Variant2 {
                 Run();
             }
 
+            double a = 0.1;
+            double b = 0.2;
+
+            Console.WriteLine(a+b);
         }
     }
 }
