@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Lab3Variant2 {
 
@@ -8,6 +10,19 @@ namespace Lab3Variant2 {
     
         static bool isRunning = true; // Глобальная переменная для главного цикла
     
+        static int IntegerParsing(string message)
+        {
+            int result;
+
+            Console.Write(message);
+            while (!int.TryParse(Console.ReadLine(), out result))
+            {
+                Console.Write(message);
+            }
+
+            return result;
+        }
+
         // Запрашивает ввод у пользователя и парсит его в double тип
         static double DoubleParsing(string message)
         {
@@ -15,20 +30,6 @@ namespace Lab3Variant2 {
 
             Console.Write(message);
             while (!double.TryParse(Console.ReadLine(), out result))
-            {
-                Console.Write(message);
-            }
-    
-            return result;
-        }
-
-        // Запрашивает ввод у пользователя и парсит его в int тип
-        static int IntegerParsing(string message)
-        {
-            int result;
-
-            Console.Write(message);
-            while (!int.TryParse(Console.ReadLine(), out result))
             {
                 Console.Write(message);
             }
@@ -54,7 +55,7 @@ namespace Lab3Variant2 {
             Console.Clear();
             Console.WriteLine("1. Отгадай ответ");
             Console.WriteLine("2. Об авторе");
-            Console.WriteLine("3. Создание массива");
+            Console.WriteLine("3. Сортировка массива");
             Console.WriteLine("4. Выход");
             Console.Write("Ваш выбор: ");
         }
@@ -76,13 +77,14 @@ namespace Lab3Variant2 {
             {
                 Console.WriteLine("Деление на ноль невозможно"); 
                 Console.WriteLine("\nПопробуйте снова");
+                Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                 Console.ReadKey();
 
                 return CalculateMethod();
             }
             else
             {
-                return task2;
+                return Math.Round(task2, 2);
             }
         }
 
@@ -97,7 +99,7 @@ namespace Lab3Variant2 {
             {
                 Console.WriteLine($"Количество попыток: {i}");
                 double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
-                if (guess == Math.Round(answer, 2))
+                if (guess == answer)
                 {
                     BoolHandler(true);
                     i = 0;
@@ -108,8 +110,8 @@ namespace Lab3Variant2 {
                 }
             }
 
-            Console.WriteLine($"\nОтвет: {Math.Round(answer, 2)}");
-            Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
+            Console.WriteLine($"\nОтвет: {answer}");
+            Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
 
@@ -136,17 +138,45 @@ namespace Lab3Variant2 {
             }
         }
 
-        // Метод, который будет вызываться из меню
-        static void ArraySorting()
+        static TimeSpan BubbleSorting(int[] array, int len)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            for (int i = 0; i + 1 < len; i++) {
+                for (int j = 0; j + 1 < len; j++)
+                {
+                    if (array[j] > array[j+1])
+                    {
+                        int temp = array[j];
+                        array[j] = array[j+1];
+                        array[j+1] = temp;
+                    }
+                    
+                }
+            }
+            stopwatch.Stop();
+
+            return stopwatch.Elapsed;
+        }
+
+        static TimeSpan PasteSorting(int[array], int len)
         {
 
+        }
+
+        // Метод, который будет вызываться из меню
+        static void CreateArray()
+        {
             Console.Clear();
 
-            Console.WriteLine("Добро пожаловать в метод для создания массива");
-            int arraySize = IntegerParsing("Введите размер для массива: ");
+            Console.WriteLine("Добро пожаловать в метод сравнения сортировок массива");
+            int arraySize = IntegerParsing("Выберите размер для массива: ");
             int[] array = new int[arraySize];
 
             RandomArray(array, arraySize);
+            TimeSpan bubbleTime = BubbleSorting(array, arraySize);
+            Console.WriteLine($"Время выполнения: {bubbleTime.TotalMilliseconds} миллисекунд");
             OutputArray(array);
 
             Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
@@ -158,7 +188,7 @@ namespace Lab3Variant2 {
             Console.Clear();
             Console.WriteLine("Сделал Рахматулин Родион");
             Console.WriteLine("группа 6105-090301D");
-            Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
+            Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
     
@@ -189,7 +219,7 @@ namespace Lab3Variant2 {
                     Console.WriteLine("\nВведите либо y, либо n, либо д, либо н.");
                     Console.WriteLine("Другие варианты не примаются");
 
-                    Console.WriteLine("\nНажмите Enter, чтобы вернуться к выбору ...");
+                    Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                     Console.ReadKey();
                 }
             }
@@ -212,7 +242,7 @@ namespace Lab3Variant2 {
                     break;
 
                 case "3":
-                    ArraySorting();
+                    CreateArray();
                     break;
     
                 case "4":
@@ -221,7 +251,9 @@ namespace Lab3Variant2 {
     
                 default:
                     Console.Clear();
-                    Console.WriteLine("Нет такого варианта\n");
+                    Console.WriteLine("Соответствия не найдено");
+                    Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
+                    Console.ReadKey();
                     break;
             }
         }
@@ -235,7 +267,6 @@ namespace Lab3Variant2 {
             {
                 Run();
             }
-
         }
     }
 }

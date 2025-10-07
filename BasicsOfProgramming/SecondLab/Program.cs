@@ -230,7 +230,7 @@ namespace Lab2Variant2 {
                     Console.Clear();
                     Console.WriteLine("Соответствия не найдено");
                     Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
-                    Console.ReadLine();
+                    Console.ReadKey();
                     break;
             }
         }

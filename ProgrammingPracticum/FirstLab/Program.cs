@@ -1,179 +1,222 @@
-﻿class Program
+﻿using System;
+
+namespace FirstLabOfPracticum
 {
 
-    static bool isRunning = true;
-
-    static double DoubleParsing(string message)
+    class Program
     {
-        double result = 0;
 
-        Console.Write(message);
-        while (!double.TryParse(Console.ReadLine(), out result))
+        static bool isRunning = true;
+
+        static double DoubleParsing(string message)
         {
+            double result = 0;
+
             Console.Write(message);
+            while (!double.TryParse(Console.ReadLine(), out result))
+            {
+                Console.Write(message);
+            }
+
+            return result;
         }
 
-        return result;
-    }
-
-    // Вариант 1
-    static void GuardSalary()
-    {
-        Console.Clear();
-
-        double perDay = DoubleParsing("Введите ваш оклад за один день: ");
-        double workingDays = DoubleParsing("Введите количество отработанных дней: ");
-        double workingNights = DoubleParsing("Введите количество ночных смен: ");
-        double overtime = DoubleParsing("Введите количество отработанных сверхурочных часов: ");
-
-        double finnalySalary = 0;
-
-        workingDays -= workingNights;
-        finnalySalary += workingDays * perDay;
-        finnalySalary += workingNights * (perDay * 1.2);
-        finnalySalary += overtime * 300;
-        // Налог
-        finnalySalary *= 0.83;
-
-        Console.WriteLine($"Ваша итоговая зарплата: {finnalySalary}");
-
-        Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
-        Console.ReadKey();
-    }
-
-    // Вариант 2
-    static void Variant2()
-    {
-        Console.Clear();
-
-        Console.WriteLine("Метод в разработке");
-
-        Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
-        Console.ReadKey();
-    }
-
-    // Вариант 3
-    static void TravelCost()
-    {
-        Console.Clear();
-
-        double distance = DoubleParsing("Расстояние в км: ");
-        double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
-        double pricePerLiter = DoubleParsing("Цена за литр: ");
-
-        double fuelUsage = distance * (averageFuelUsage / 100);
-        double result = fuelUsage * pricePerLiter;
-
-        Console.WriteLine($"Цена поездки обойдётся в {result}");
-
-        Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
-        Console.ReadKey();
-    }
-
-    // Вариант 4
-    static void Variant4()
-    {
-        Console.Clear();
-
-        Console.WriteLine("Метод в разработке");
-
-        Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
-        Console.ReadKey();
-    }
-
-    // Вариант 5
-    static void Variant5()
-    {
-        Console.Clear();
-
-        Console.WriteLine("Метод в разработке");
-
-        Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
-        Console.ReadKey();
-    }
-
-    static void ShowMenu()
-    {
-        Console.WriteLine("Добро пожаловать в консольное приложение 💫\n");
-        Console.WriteLine("1. Зарплата охранника");
-        Console.WriteLine("2. ");
-        Console.WriteLine("3. Цена поездки");
-        Console.WriteLine("4. ");
-        Console.WriteLine("5. ");
-        Console.WriteLine("6. Выход");
-        Console.Write("\nВаш выбор: ");
-    }
-
-    static void Exit()
-    {
-
-        bool exit = false;
-
-        while (!exit)
+        // Вариант 1
+        static void GuardSalary()
         {
             Console.Clear();
-            Console.Write("Вы точно хотите выйти? [Y/n]: ");
-            string? confirm = Console.ReadLine();
 
-            if (confirm == "" || confirm == "y")
+            double perDay = DoubleParsing("Введите ваш оклад за один день: ");
+            double workingDays = DoubleParsing("Введите количество отработанных дней: ");
+            double workingNights = DoubleParsing("Введите количество ночных смен: ");
+            double overtime = DoubleParsing("Введите количество отработанных сверхурочных часов: ");
+
+            double finnalySalary = 0;
+
+            workingDays -= workingNights;
+            finnalySalary += workingDays * perDay;
+            finnalySalary += workingNights * (perDay * 1.2);
+            finnalySalary += overtime * 300;
+            // Налог
+            finnalySalary *= 0.83;
+
+            Console.WriteLine($"Ваша итоговая зарплата: {finnalySalary}");
+
+            Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
+            Console.ReadKey();
+        }
+
+        // Вариант 2
+        static void CreditCalculator()
+        {
+            Console.Clear();
+
+            double summ = DoubleParsing("Сумма кредита: ");
+            double perYear= DoubleParsing("Годовая процентная ставка: ");
+            double years = DoubleParsing("На сколько лет: ");
+
+            double result = summ * (1 + (perYear * years) / 100);
+
+            Console.WriteLine("Вам придётся выплатить {0}", result);
+            Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
+            Console.ReadKey();
+        }
+
+        // Вариант 3
+        static void TravelCost()
+        {
+            Console.Clear();
+
+            double distance = DoubleParsing("Расстояние в км: ");
+            double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
+            double pricePerLiter = DoubleParsing("Цена за литр: ");
+
+            double fuelUsage = distance * (averageFuelUsage / 100);
+            double result = fuelUsage * pricePerLiter;
+
+            Console.WriteLine($"Цена поездки обойдётся в {result}");
+
+            Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
+            Console.ReadKey();
+        }
+
+        // Вариант 4
+        static void IndexOfMass()
+        {
+            Console.Clear();
+            
+            double mass = DoubleParsing("Введите ваш вес: ");
+            double height = DoubleParsing("Введите ваш рост(в метрах): ");
+
+            double result = mass / (height * height);
+
+            if (result < 18.5)
             {
-                isRunning = false;
-                exit = true; 
+                Console.WriteLine("У вас недовес :(");
             }
-            else if (confirm == "n")
+            else if (result < 29.5)
             {
-                exit = true;
+                Console.WriteLine("Нормальный вес:)");
             }
             else
             {
-                
+                Console.WriteLine("У вас ожирение :(");
+            }
+            
+            Console.WriteLine("Ваш индекс тела: {0}", result);
+
+            Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
+            Console.ReadKey();
+        }
+
+        // Вариант 5
+        static void MunicipalServices()
+        {
+            Console.Clear();
+
+            const int perWater = 4;
+            const int perGas = 14;
+            const int perEnergy = 4;
+
+
+            double waterUsing = DoubleParsing("Расход воды(кВт/ч): ");
+            double gasUsing = DoubleParsing("Расход газа(кВт/ч): ");
+            double energyUsing = DoubleParsing("Расход электроэнергии(кВт/ч): ");
+
+            double waterPrice = perWater * waterUsing; 
+            double gasPrice = (perGas * gasUsing) / 100; 
+            double energyPrice = perEnergy * energyUsing; 
+
+            Console.WriteLine("\nЦена за воду: {0}", waterPrice);
+            Console.WriteLine("Цена за газ: {0}", gasPrice);
+            Console.WriteLine("Цена за электроэнергию: {0}", energyPrice);
+            Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
+            Console.ReadKey();
+        }
+
+        static void ShowMenu()
+        {
+            Console.WriteLine("Добро пожаловать в консольное приложение 💫\n");
+            Console.WriteLine("1. Зарплата охранника");
+            Console.WriteLine("2. Калькулятор кредита");
+            Console.WriteLine("3. Цена поездки");
+            Console.WriteLine("4. Индекс массы тела");
+            Console.WriteLine("5. Коммунальные услуги");
+            Console.WriteLine("6. Выход");
+            Console.Write("\nВаш выбор: ");
+        }
+
+        static void Exit()
+        {
+
+            bool exit = false;
+
+            while (!exit)
+            {
+                Console.Clear();
+                Console.Write("Вы точно хотите выйти? [Y/n]: ");
+                string? confirm = Console.ReadLine();
+
+                if (confirm == "" || confirm == "y")
+                {
+                    isRunning = false;
+                    exit = true; 
+                }
+                else if (confirm == "n")
+                {
+                    exit = true;
+                }
+                else
+                {
+                    
+                }
             }
         }
-    }
 
-    static void Menu()
-    {
-        Console.Clear();
-        ShowMenu();
-
-        string? choice = Console.ReadLine();
-        switch (choice)
+        static void Menu()
         {
-            case "1":
-                GuardSalary();
-                break;
+            Console.Clear();
+            ShowMenu();
 
-            case "2":
-                Variant2();
-                break;
+            string? choice = Console.ReadLine();
+            switch (choice)
+            {
+                case "1":
+                    GuardSalary();
+                    break;
 
-            case "3":
-                TravelCost();
-                break;
+                case "2":
+                    CreditCalculator();
+                    break;
 
-            case "4":
-                Variant4();
-                break;
+                case "3":
+                    TravelCost();
+                    break;
 
-            case "5":
-                Variant5();
-                break;
+                case "4":
+                    IndexOfMass();
+                    break;
 
-            case "6":
-                Exit();
-                break;
+                case "5":
+                    MunicipalServices();
+                    break;
 
-            default:
-                break;
+                case "6":
+                    Exit();
+                    break;
+
+                default:
+                    break;
+            }
         }
-    }
 
-    static void Main(string[] args)
-    {
-        
-        while (isRunning)
+        static void Main(string[] args)
         {
-            Menu();
+            
+            while (isRunning)
+            {
+                Menu();
+            }
         }
     }
 }
