@@ -28,23 +28,99 @@ namespace SecondLabOfPracticum
             {
                 Console.Clear();
 
-                double perDay = DoubleParsing("Введите ваш оклад за один день: ");
-                double workingDays = DoubleParsing("Введите количество отработанных дней: ");
-                double workingNights = DoubleParsing("Введите количество ночных смен: ");
-                double overtime = DoubleParsing("Введите количество отработанных сверхурочных часов: ");
+                Console.WriteLine("=== Калькулятор зарплаты охранника ===\n");
+                Console.WriteLine("1. Рассчитать зарплату");
+                Console.WriteLine("2. Выйти");
+                Console.Write("\nВыберите действие: ");
 
-                double finnalySalary = 0;
+                string? choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
 
-                workingDays -= workingNights;
-                finnalySalary += workingDays * perDay;
-                finnalySalary += workingNights * (perDay * 1.2);
-                finnalySalary += overtime * 300;
-                // Налог
-                finnalySalary *= 0.83;
+                        bool isContinue = true;
+                        while (isContinue)
+                        {
+                            Console.WriteLine();
+                            double salary = DoubleParsing("Введите ваш оклад: ");
+                            double workingDays = DoubleParsing("Введите количество отработанных дней: ");
+                            double workingNights = DoubleParsing("Введите количество ночных смен: ");
+                            double overtime = DoubleParsing("Введите количество отработанных сверхурочных часов: ");
 
-                Console.WriteLine($"Ваша итоговая зарплата: {finnalySalary}");
+                            Console.Write("Были нарушения? [y/n]: ");
+                            string? input = Console.ReadLine()?.ToLower();
+                            while (input != "y" && input != "n")
+                            {
+                                Console.Write("Были нарушения? [y/n]: ");
+                                input = Console.ReadLine()?.ToLower();
+                            }
 
-                Exit(ref isRun, "\nВыйти? [Y/n]: ");
+                            double workingExperience = DoubleParsing("Введите стаж: ");
+                            try {
+                                double perDay = salary / workingDays;
+                                double finallySalary = 0;
+
+                                Console.WriteLine("\n=== Результат ===");
+
+                                Console.WriteLine("Оклад: {0}", salary);
+                                finallySalary += salary;
+
+                                Console.WriteLine("Надбавка за ночные смены: {0}", workingNights * (perDay * 0.2));
+                                finallySalary += workingNights * (perDay * 0.2);
+
+                                Console.WriteLine("Сверхурочные: {0}", overtime * 300);
+                                finallySalary += overtime * 300;
+
+                                double prem;
+                                if (workingExperience >= 10)
+                                {
+                                    prem = finallySalary * 0.2;
+                                }
+                                else if (workingExperience >= 5)
+                                {
+                                    prem = finallySalary * 0.1;
+                                }
+                                else
+                                {
+                                    prem = 0;
+                                }
+                                finallySalary += prem;
+                                Console.WriteLine("Премия за стаж: {0}", prem);
+
+                                if (input == "y")
+                                {
+                                    Console.WriteLine("Штраф: {0}", finallySalary * 0.15);
+                                    finallySalary *= 0.85;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Штраф: 0");
+                                }
+
+                                Console.WriteLine("Налог: {0}", finallySalary * 0.13);
+                                finallySalary -= finallySalary * 0.13;
+
+                                Console.WriteLine($"Итого на руки: {finallySalary}");
+                                Exit(ref isContinue, "Продолжить? [y/N]: ");
+                            }
+                            catch (DivideByZeroException)
+                            {
+                                Console.WriteLine("Деление на ноль невозможно");
+                            }
+                            finally
+                            {
+                                Console.WriteLine("Расчёт окончен");
+                            }
+                        }
+                        break;
+                    
+                    case "2":
+                        Exit(ref isRun, "\nВы точно хотите выйти? [Y/n]: ");
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
@@ -170,11 +246,11 @@ namespace SecondLabOfPracticum
             while (!exit)
             {
                 Console.Write(message);
-                string? confirm = Console.ReadLine();
+                string? confirm = Console.ReadLine()?.ToLower();
 
                 if (confirm == "" || confirm == "y")
                 {
-                    boolean = false;
+                    boolean = !boolean;
                     exit = true; 
                 }
                 else if (confirm == "n")

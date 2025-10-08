@@ -26,11 +26,11 @@ namespace FirstLabOfPracticum
         {
             Console.Clear();
 
-            double perDay = DoubleParsing("Введите ваш оклад за один день: ");
+            double salary = DoubleParsing("Введите ваш оклад: ");
             double workingDays = DoubleParsing("Введите количество отработанных дней: ");
             double workingNights = DoubleParsing("Введите количество ночных смен: ");
             double overtime = DoubleParsing("Введите количество отработанных сверхурочных часов: ");
-
+            double perDay = salary / workingDays;
             double finnalySalary = 0;
 
             workingDays -= workingNights;
@@ -155,7 +155,7 @@ namespace FirstLabOfPracticum
             {
                 Console.Clear();
                 Console.Write("Вы точно хотите выйти? [Y/n]: ");
-                string? confirm = Console.ReadLine();
+                string? confirm = Console.ReadLine()?.ToLower();
 
                 if (confirm == "" || confirm == "y")
                 {
