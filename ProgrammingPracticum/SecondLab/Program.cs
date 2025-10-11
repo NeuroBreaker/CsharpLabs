@@ -38,12 +38,17 @@ namespace SecondLabOfPracticum
                 {
                     case "1":
 
-                        bool isContinue = true;
-                        while (isContinue)
+                        bool isContinue= false;
+                        while (!isContinue)
                         {
                             Console.WriteLine();
                             double salary = DoubleParsing("Введите ваш оклад: ");
                             double workingDays = DoubleParsing("Введите количество отработанных дней: ");
+                            while (workingDays == 0)
+                            {
+                                Console.WriteLine("Деление на ноль невозможно");
+                                workingDays = DoubleParsing("Введите количество отработанных дней: ");
+                            }
                             double workingNights = DoubleParsing("Введите количество ночных смен: ");
                             double overtime = DoubleParsing("Введите количество отработанных сверхурочных часов: ");
 
@@ -101,19 +106,43 @@ namespace SecondLabOfPracticum
                                 finallySalary -= finallySalary * 0.13;
 
                                 Console.WriteLine($"Итого на руки: {finallySalary}");
-                                Exit(ref isContinue, "Продолжить? [y/N]: ");
+
+                                string message = "Продолжить? [y/N]";
+                                bool exit = false;
+                                while (!exit)
+                                {
+                                    Console.Write(message);
+                                    string? confirm = Console.ReadLine()?.ToLower();
+
+                                    if (confirm == "y")
+                                    {
+                                        exit = true; 
+                                    }
+                                    else if (confirm == "" || confirm == "n")
+                                    {
+                                        isContinue = !isContinue;
+                                        exit = true;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Совпадений не найдено");
+                                        Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                    }
+                                }
                             }
-                            catch (DivideByZeroException)
+                            catch (DivideByZeroException e)
                             {
-                                Console.WriteLine("Деление на ноль невозможно");
+                                Console.WriteLine(e);
                             }
                             finally
                             {
-                                Console.WriteLine("Расчёт окончен");
+                                Console.WriteLine("Расчёт завершён");
                             }
                         }
                         break;
-                    
+                                        
                     case "2":
                         Exit(ref isRun, "\nВы точно хотите выйти? [Y/n]: ");
                         break;
