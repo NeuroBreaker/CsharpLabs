@@ -143,8 +143,8 @@ namespace Lab3Variant2 {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            for (int i = 0; i + 1 < len; i++) {
-                for (int j = 0; j + 1 < len; j++)
+            for (int i = 0; i < len - 1; i++) {
+                for (int j = 0; j < len - 1 - i; j++)
                 {
                     if (array[j] > array[j+1])
                     {
@@ -152,7 +152,6 @@ namespace Lab3Variant2 {
                         array[j] = array[j+1];
                         array[j+1] = temp;
                     }
-                    
                 }
             }
             stopwatch.Stop();
@@ -160,9 +159,26 @@ namespace Lab3Variant2 {
             return stopwatch.Elapsed;
         }
 
-        static TimeSpan PasteSorting(int[array], int len)
+        static TimeSpan InsertSorting(int[] array, int len)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
+            for (int i = 1; i < len; ++i)
+            {
+                int j = i - 1;
+                int temp = array[i];
+                while (array[j] > temp && j >= 0)
+                {
+                    array[j + 1] = array[j];
+                    --j;
+                }
+                array[j + 1] = temp;
+            }
+
+            stopwatch.Stop();
+
+            return stopwatch.Elapsed;
         }
 
         // Метод, который будет вызываться из меню
@@ -172,12 +188,34 @@ namespace Lab3Variant2 {
 
             Console.WriteLine("Добро пожаловать в метод сравнения сортировок массива");
             int arraySize = IntegerParsing("Выберите размер для массива: ");
-            int[] array = new int[arraySize];
 
-            RandomArray(array, arraySize);
-            TimeSpan bubbleTime = BubbleSorting(array, arraySize);
-            Console.WriteLine($"Время выполнения: {bubbleTime.TotalMilliseconds} миллисекунд");
-            OutputArray(array);
+            int[] array1 = new int[arraySize];
+            RandomArray(array1, arraySize);
+
+            int[] array2 = array1;
+
+            Console.WriteLine("Неотсортированный массив:");
+
+            // Сортировка массива методом пузырька
+            TimeSpan bubbleTime = BubbleSorting(array1, arraySize);
+            Console.WriteLine($"\nВремя выполнения сортировки пузырьком: {bubbleTime.TotalMilliseconds} миллисекунд");
+            OutputArray(array1);
+
+
+            // Сортировка массива методом вставки
+            TimeSpan insertTime = InsertSorting(array2, arraySize);
+            Console.WriteLine($"\nВремя выполнения сортировки вставками: {insertTime.TotalMilliseconds} миллисекунд");
+            OutputArray(array2);
+
+            if (bubbleTime > insertTime)
+            {
+                Console.WriteLine($"\nАлгоритм сортировки пузырьком оказался быстрее на {bubbleTime.TotalMilliseconds - insertTime.TotalMilliseconds} миллисекунд");
+            }
+            else
+            {
+                Console.WriteLine($"\nАлгоритм сортировки пузырьком оказался быстрее на {insertTime.TotalMilliseconds - bubbleTime.TotalMilliseconds} миллисекунд");
+            }
+
 
             Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
             Console.ReadKey();
