@@ -61,45 +61,23 @@ namespace Lab3Variant2 {
         }
     
         // Часть кода из первой лабораторной работы
-        static double CalculateMethod()
+        static double CalculateMethod(double a, double b)
         {
-    
             const double PI = Math.PI;
-            double a, b;
-    
-            Console.WriteLine("Задача:\nf = π(ln b^5 / sin(a) + 1)");
-            a = DoubleParsing("Введите число a: ");
-            b = DoubleParsing("Введите число b: ");
-    
-            double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
-    
-            if ((Math.Sin(a) + 1) == 0)
-            {
-                Console.WriteLine("Деление на ноль невозможно"); 
-                Console.WriteLine("\nПопробуйте снова");
-                Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
-                Console.ReadKey();
 
-                return CalculateMethod();
-            }
-            else
-            {
-                return Math.Round(task2, 2);
-            }
+            double result = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
+
+            return Math.Round(result, 2);
         }
 
-        static void GuessAnswer() 
+        static void Guess(double result)
         {
-            Console.Clear();
-    
-            double answer = CalculateMethod();
-
             int i;
             for (i = 3; i > 0; i--) 
             {
                 Console.WriteLine($"Количество попыток: {i}");
                 double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
-                if (guess == answer)
+                if (guess == result)
                 {
                     BoolHandler(true);
                     i = 0;
@@ -109,18 +87,45 @@ namespace Lab3Variant2 {
                     BoolHandler(false);
                 }
             }
+        }
 
-            Console.WriteLine($"\nОтвет: {answer}");
+        // Угадайка
+        static void GuessAnswer() 
+        {
+            Console.Clear();
+    
+            Console.WriteLine("Задача:\nf = π(ln b^5 / sin(a) + 1)");
+
+            double a, b;
+
+            a = DoubleParsing("Введите число a: ");
+            b = DoubleParsing("Введите число b: ");
+
+            if ((Math.Sin(a) + 1) == 0)
+            {
+                Console.WriteLine("Деление на ноль невозможно"); 
+                Console.WriteLine("\nПопробуйте снова");
+                Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
+                Console.ReadKey();
+
+                GuessAnswer();
+            }
+
+            double result = CalculateMethod(a, b);
+
+            Guess(result);
+
+            Console.WriteLine($"\nОтвет: {result}");
             Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
 
         // Заполнение массива случайными значениями
-        static int[] RandomArray(int[] array, int len)
+        static int[] FillArray(int[] array)
         {
             
             Random rnd = new Random();
-            for (int i = 0; i < len; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 int num = rnd.Next(-9, 9);
                 array[i] = num;
@@ -132,88 +137,144 @@ namespace Lab3Variant2 {
         // Вывод массива в консоль
         static void OutputArray(int[] array)
         {
-            foreach (int i in array)
+            int size = array.Length;
+            if (size > 10)
             {
-                Console.Write("{0} ", i);
+                Console.WriteLine("Массивы не могут быть выведены на экран, так как длина массива больше 10");
+            }
+            else
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    Console.Write("{0} ", array[i]);
+                }
+                Console.WriteLine();
             }
         }
 
-        static TimeSpan BubbleSorting(int[] array, int len)
+        static int[] BubbleSorting(int[] array)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            for (int i = 0; i < len - 1; i++) {
-                for (int j = 0; j < len - 1 - i; j++)
+            int size = array.Length;
+            int[] sortingArray = CloneArray(array);
+            for (int i = 0; i < size - 1; i++) {
+                for (int j = 0; j < size - 1 - i; j++)
                 {
-                    if (array[j] > array[j+1])
+                    if (sortingArray[j] > sortingArray[j+1])
                     {
-                        int temp = array[j];
-                        array[j] = array[j+1];
-                        array[j+1] = temp;
+                        int temp = sortingArray[j];
+                        sortingArray[j] = sortingArray[j+1];
+                        sortingArray[j+1] = temp;
                     }
                 }
             }
-            stopwatch.Stop();
 
-            return stopwatch.Elapsed;
+            return sortingArray;
         }
 
-        static TimeSpan InsertSorting(int[] array, int len)
+        static int[] InsertSorting(int[] array)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            for (int i = 1; i < len; ++i)
+            int size = array.Length;
+            int[] sortingArray = CloneArray(array);
+            for (int i = 1; i < size; ++i)
             {
                 int j = i - 1;
-                int temp = array[i];
-                while (array[j] > temp && j >= 0)
+                int temp = sortingArray[i];
+                while (j >= 0 && sortingArray[j] > temp)
                 {
-                    array[j + 1] = array[j];
+                    sortingArray[j + 1] = sortingArray[j];
                     --j;
                 }
-                array[j + 1] = temp;
+                sortingArray[j + 1] = temp;
             }
 
-            stopwatch.Stop();
+            return sortingArray;
+        }
 
-            return stopwatch.Elapsed;
+        // Ввод размера массива
+        static int InputArraySize()
+        {
+            int arraySize;
+            do {
+                arraySize = IntegerParsing("Выберите размер для массива: ");
+
+                if (arraySize < 1)
+                {
+                    Console.WriteLine("Массив не может состоять из 0 и меньше элементов");
+                }
+            }
+            while(arraySize < 1);
+
+            return arraySize;
+        }
+
+        static int[] ArrayInitialization(int size)
+        {
+            int[] array = new int[size];
+            FillArray(array);
+
+            return array;
+        }
+
+        static int[] CloneArray(int[] array)
+        {
+            int size = array.Length;
+            int[] cloneArray = new int[size];
+            for (int i = 0; i < size; i++)
+            {
+                cloneArray[i] = array[i];    
+            }
+
+            return cloneArray;
         }
 
         // Метод, который будет вызываться из меню
-        static void CreateArray()
+        static void ArraysSorting()
         {
             Console.Clear();
 
             Console.WriteLine("Добро пожаловать в метод сравнения сортировок массива");
-            int arraySize = IntegerParsing("Выберите размер для массива: ");
 
-            int[] array1 = new int[arraySize];
-            RandomArray(array1, arraySize);
-
-            int[] array2 = array1;
+            int arraySize = InputArraySize();
+            int[] array = ArrayInitialization(arraySize);
 
             Console.WriteLine("Неотсортированный массив:");
-
-            // Сортировка массива методом пузырька
-            TimeSpan bubbleTime = BubbleSorting(array1, arraySize);
-            Console.WriteLine($"\nВремя выполнения сортировки пузырьком: {bubbleTime.TotalMilliseconds} миллисекунд");
-            OutputArray(array1);
+            OutputArray(array);
 
 
-            // Сортировка массива методом вставки
-            TimeSpan insertTime = InsertSorting(array2, arraySize);
-            Console.WriteLine($"\nВремя выполнения сортировки вставками: {insertTime.TotalMilliseconds} миллисекунд");
-            OutputArray(array2);
+            // ---------------------------------------
+            Stopwatch stopwatchBubble = new Stopwatch();
+            stopwatchBubble.Start();
 
-            if (bubbleTime > insertTime)
+            int[] bubbleSortingArray = BubbleSorting(array);
+
+            stopwatchBubble.Stop();
+
+            Console.WriteLine($"\nВремя выполнения сортировки пузырьком: {stopwatchBubble.ElapsedMilliseconds} миллисекунд");
+            Console.WriteLine("Отсортированный массив:");
+            OutputArray(bubbleSortingArray);
+            // ---------------------------------------
+
+            // ---------------------------------------
+            Stopwatch stopwatchInsert = new Stopwatch();
+            stopwatchInsert.Start();
+
+            int[] insertSortingArray = InsertSorting(array);
+
+            stopwatchInsert.Stop();
+            Console.WriteLine($"\nВремя выполнения сортировки вставками: {stopwatchInsert.ElapsedMilliseconds} миллисекунд");
+            Console.WriteLine("Отсортированный массив:");
+            OutputArray(insertSortingArray);
+            // ---------------------------------------
+
+            if (stopwatchInsert.ElapsedMilliseconds > stopwatchBubble.ElapsedMilliseconds)
             {
-                Console.WriteLine($"\nАлгоритм сортировки пузырьком оказался быстрее на {bubbleTime.TotalMilliseconds - insertTime.TotalMilliseconds} миллисекунд");
+                var difference = stopwatchInsert.ElapsedMilliseconds - stopwatchBubble.ElapsedMilliseconds;
+                Console.WriteLine($"\nАлгоритм сортировки пузырьком оказался быстрее на {difference} миллисекунд");
             }
             else
             {
-                Console.WriteLine($"\nАлгоритм сортировки пузырьком оказался быстрее на {insertTime.TotalMilliseconds - bubbleTime.TotalMilliseconds} миллисекунд");
+                var difference = stopwatchBubble.ElapsedMilliseconds - stopwatchInsert.ElapsedMilliseconds;
+                Console.WriteLine($"\nАлгоритм сортировки вставками оказался быстрее на {difference} миллисекунд");
             }
 
 
@@ -230,7 +291,7 @@ namespace Lab3Variant2 {
             Console.ReadKey();
         }
     
-        static void Exit()
+        static bool Exit()
         {
             bool runnable = true;
     
@@ -243,24 +304,25 @@ namespace Lab3Variant2 {
                 if (confirm == "д" || confirm == "y"
                         || confirm == "" )
                 {
-                    isRunning = false;
                     runnable = false;
                     Console.Clear();
+                    return false;
                 }
                 else if (confirm == "н" || confirm == "n")
                 {
-                    Console.Clear();
                     runnable = false;
+                    Console.Clear();
                 }
                 else
                 {
-                    Console.WriteLine("\nВведите либо y, либо n, либо д, либо н.");
+                    Console.WriteLine("\nВведите либо Enter, либо y, либо n, либо д, либо н.");
                     Console.WriteLine("Другие варианты не примаются");
 
                     Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                     Console.ReadKey();
                 }
             }
+            return true;
         }
     
         static void Run()
@@ -280,11 +342,11 @@ namespace Lab3Variant2 {
                     break;
 
                 case "3":
-                    CreateArray();
+                    ArraysSorting();
                     break;
     
                 case "4":
-                    Exit();
+                    isRunning = Exit();
                     break;
     
                 default:
