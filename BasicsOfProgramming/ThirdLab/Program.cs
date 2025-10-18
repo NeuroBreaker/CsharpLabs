@@ -8,8 +8,6 @@ namespace Lab3Variant2 {
     class Program
     {
     
-        static bool isRunning = true; // Глобальная переменная для главного цикла
-    
         static int IntegerParsing(string message)
         {
             int result;
@@ -240,31 +238,23 @@ namespace Lab3Variant2 {
             Console.WriteLine("Неотсортированный массив:");
             OutputArray(array);
 
-
-            // ---------------------------------------
             Stopwatch stopwatchBubble = new Stopwatch();
             stopwatchBubble.Start();
-
             int[] bubbleSortingArray = BubbleSorting(array);
-
             stopwatchBubble.Stop();
 
             Console.WriteLine($"\nВремя выполнения сортировки пузырьком: {stopwatchBubble.ElapsedMilliseconds} миллисекунд");
             Console.WriteLine("Отсортированный массив:");
             OutputArray(bubbleSortingArray);
-            // ---------------------------------------
 
-            // ---------------------------------------
             Stopwatch stopwatchInsert = new Stopwatch();
             stopwatchInsert.Start();
-
             int[] insertSortingArray = InsertSorting(array);
-
             stopwatchInsert.Stop();
+
             Console.WriteLine($"\nВремя выполнения сортировки вставками: {stopwatchInsert.ElapsedMilliseconds} миллисекунд");
             Console.WriteLine("Отсортированный массив:");
             OutputArray(insertSortingArray);
-            // ---------------------------------------
 
             if (stopwatchInsert.ElapsedMilliseconds > stopwatchBubble.ElapsedMilliseconds)
             {
@@ -285,8 +275,8 @@ namespace Lab3Variant2 {
         static void AboutAuthor()
         {
             Console.Clear();
-            Console.WriteLine("Сделал Рахматулин Родион");
-            Console.WriteLine("группа 6105-090301D");
+            Console.WriteLine("Сделал Anon Anonovich");
+            Console.WriteLine("группа ananisti");
             Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
@@ -306,7 +296,7 @@ namespace Lab3Variant2 {
                 {
                     runnable = false;
                     Console.Clear();
-                    return false;
+                    return true;
                 }
                 else if (confirm == "н" || confirm == "n")
                 {
@@ -322,10 +312,10 @@ namespace Lab3Variant2 {
                     Console.ReadKey();
                 }
             }
-            return true;
+            return false;
         }
     
-        static void Run()
+        static bool Run()
         {
             ShowMenu();
     
@@ -335,26 +325,25 @@ namespace Lab3Variant2 {
             {
                 case "1":
                     GuessAnswer();
-                    break;
+                    return false;
     
                 case "2":
                     AboutAuthor();
-                    break;
+                    return false;
 
                 case "3":
                     ArraysSorting();
-                    break;
+                    return false;
     
                 case "4":
-                    isRunning = Exit();
-                    break;
+                    return Exit();
     
                 default:
                     Console.Clear();
                     Console.WriteLine("Соответствия не найдено");
                     Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                     Console.ReadKey();
-                    break;
+                    return false;
             }
         }
     
@@ -363,9 +352,10 @@ namespace Lab3Variant2 {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding  = Encoding.UTF8;
     
-            while(isRunning)
+            bool isExit = false;
+            while(!isExit)
             {
-                Run();
+                isExit = Run();
             }
         }
     }
