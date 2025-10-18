@@ -6,8 +6,6 @@ namespace Lab2Variant2 {
     class Program
     {
     
-        static bool isRunning = true; // Глобальная переменная для главного цикла
-    
         // Запрашивает ввод у пользователя и парсит его в double тип
         static double DoubleParsing(string message)
         {
@@ -22,6 +20,7 @@ namespace Lab2Variant2 {
             return result;
         }
 
+        // Принимает true или false, на основе них выдаёт сообщение
         static void BoolHandler(bool boolean)
         {
 
@@ -35,6 +34,7 @@ namespace Lab2Variant2 {
             }
         }
 
+        // Отображает меню выбора
         static void ShowMenu() 
         {
             Console.Clear();
@@ -46,45 +46,24 @@ namespace Lab2Variant2 {
         }
     
         // Часть кода из первой лабораторной работы
-        static double CalculateMethod()
+        static double CalculateMethod(double a, double b)
         {
-    
             const double PI = Math.PI;
-            double a, b;
-    
-            Console.WriteLine("Задача:\nf = π(ln b^5 / sin(a) + 1)");
-            a = DoubleParsing("Введите число a: ");
-            b = DoubleParsing("Введите число b: ");
-    
-            double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
-    
-            if ((Math.Sin(a) + 1) == 0)
-            {
-                Console.WriteLine("Деление на ноль невозможно"); 
-                Console.WriteLine("\nПопробуйте снова");
-                Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
-                Console.ReadKey();
 
-                return CalculateMethod();
-            }
-            else
-            {
-                return Math.Round(task2, 2);
-            }
+            double result = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1)); // Решение для второго варианта
+
+            return Math.Round(result, 2);
         }
 
-        static void GuessAnswer() 
+        // Метод для сравнения ввода пользователя и верного результата
+        static void Guess(double result)
         {
-            Console.Clear();
-    
-            double answer = CalculateMethod();
-
             int i;
             for (i = 3; i > 0; i--) 
             {
                 Console.WriteLine($"Количество попыток: {i}");
                 double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
-                if (guess == answer)
+                if (guess == result)
                 {
                     BoolHandler(true);
                     i = 0;
@@ -94,14 +73,40 @@ namespace Lab2Variant2 {
                     BoolHandler(false);
                 }
             }
+        }
 
-            Console.WriteLine($"\nОтвет: {answer}");
+        // Метод вызываемый после меню 
+        // (генерация мат. задачи на основе ввода пользователя, попытки пользователя угадать ответ 3 раза)
+        static void GuessAnswer() 
+        {
+            Console.Clear();
+    
+            Console.WriteLine("Задача:\nf = π(ln b^5 / sin(a) + 1)");
+
+            double a = DoubleParsing("Введите число a: ");
+            double b = DoubleParsing("Введите число b: ");
+
+            if ((Math.Sin(a) + 1) == 0)
+            {
+                Console.WriteLine("Деление на ноль невозможно"); 
+                Console.WriteLine("\nПопробуйте снова");
+                Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
+                Console.ReadKey();
+                
+                GuessAnswer();
+            }
+
+            double result = CalculateMethod(a, b);
+
+            Guess(result);
+
+            Console.WriteLine($"\nОтвет: {result}");
             Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
 
         // Генерация задачи
-        static void GenerateTask(out double result)
+        static double GenerateTask()
         {
             Random random = new Random();
             
@@ -109,50 +114,52 @@ namespace Lab2Variant2 {
             int num2 = random.Next(1, 10); 
             int operation = random.Next(1, 5);
 
-            result = 0;
+            double result;
 
             switch (operation)
             {
                 case 1: 
                     Console.WriteLine($"Решите задачу: {num1} + {num2}");
                     result = num1 + num2;
-                    break;
+                    return result;
 
                 case 2:
                     Console.WriteLine($"Решите задачу: {num1} - {num2}");
                     result = num1 - num2;
-                    break;
+                    return result;
 
                 case 3:
                     Console.WriteLine($"Решите задачу: {num1} * {num2}");
                     result = num1 * num2;
-                    break;
+                    return result;
 
                 case 4:
                     Console.WriteLine($"Решите задачу: {num1} / {num2}");
-                    result = Math.Round((double)num1 / num2, 2);
-                    break;
+                    result = Math.Round((double)num1 / (double)num2, 2);
+                    return result;
             }
+            return 0;
         }
 
+        // Решение случайных задач
         static void SolveSimpleTasks()
         {
             int result = 0;
-            double answer;
+            double correctValue;
 
             Console.Clear();
             for (int i = 0; i < 3; ++i)
             {
-                GenerateTask(out answer);
+                correctValue = GenerateTask();
                 double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после .): ");
-                BoolHandler(answer == guess);
+                BoolHandler(guess == correctValue);
 
-                if (answer == guess)
+                if (guess == correctValue)
                 {
                     result += 1;
                 }
 
-                Console.WriteLine($"Правильный ответ: {answer}\n");
+                Console.WriteLine($"Правильный ответ: {correctValue}\n");
             }
 
             Console.WriteLine($"Количество правильных ответов: {result}");
@@ -163,13 +170,13 @@ namespace Lab2Variant2 {
         static void AboutAuthor()
         {
             Console.Clear();
-            Console.WriteLine("Сделал Рахматулин Родион");
-            Console.WriteLine("группа 6105-090301D");
+            Console.WriteLine("Сделал anon anonovich");
+            Console.WriteLine("группа ananisti");
             Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
     
-        static void Exit()
+        static bool Exit()
         {
             bool runnable = true;
     
@@ -182,9 +189,9 @@ namespace Lab2Variant2 {
                 if (confirm == "д" || confirm == "y"
                         || confirm == "" )
                 {
-                    isRunning = false;
                     runnable = false;
                     Console.Clear();
+                    return true;
                 }
                 else if (confirm == "н" || confirm == "n")
                 {
@@ -200,9 +207,10 @@ namespace Lab2Variant2 {
                     Console.ReadKey();
                 }
             }
+            return false;
         }
     
-        static void Run()
+        static bool Run()
         {
             ShowMenu();
     
@@ -212,26 +220,25 @@ namespace Lab2Variant2 {
             {
                 case "1":
                     GuessAnswer();
-                    break;
+                    return false;
     
                 case "2":
                     SolveSimpleTasks();
-                    break;
+                    return false;
 
                 case "3":
                     AboutAuthor();
-                    break;
+                    return false;
     
                 case "4":
-                    Exit();
-                    break;
+                    return Exit();
     
                 default:
                     Console.Clear();
                     Console.WriteLine("Соответствия не найдено");
                     Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                     Console.ReadKey();
-                    break;
+                    return false;
             }
         }
     
@@ -240,9 +247,10 @@ namespace Lab2Variant2 {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding  = Encoding.UTF8;
     
-            while(isRunning)
+            bool isExit = false;
+            while(!isExit)
             {
-                Run();
+                isExit = Run();
             }
         }
     }
