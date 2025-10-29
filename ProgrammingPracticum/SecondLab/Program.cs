@@ -6,6 +6,57 @@ namespace SecondLabThirdVariant
 
     class Program
     {
+
+        // Метод для продолжения
+        static bool Continue(bool running, string message)
+        {
+
+            bool exit = false;
+
+            while (!exit)
+            {
+                Console.Clear();
+                Console.Write(message);
+                string? confirm = Console.ReadLine()?.ToLower();
+
+                if (confirm == "y")
+                {
+                    exit = true; 
+                }
+                else if (confirm == "" || confirm == "n")
+                {
+                    running = !running;
+                    exit = true;
+                }
+            }
+            return running;
+        }
+
+        // Метод для выхода
+        static bool Exit(bool running, string message)
+        {
+
+            bool exit = false;
+
+            while (!exit)
+            {
+                Console.Clear();
+                Console.Write(message);
+                string? confirm = Console.ReadLine()?.ToLower();
+
+                if (confirm == "" || confirm == "y")
+                {
+                    running = !running;
+                    exit = true; 
+                }
+                else if (confirm == "n")
+                {
+                    exit = true;
+                }
+            }
+            return running;
+        }
+
         // Будет отправлять повторно message, пока не запарсит вводимое число
         static int IntegerParsing(string message)
         {
@@ -37,7 +88,7 @@ namespace SecondLabThirdVariant
         }
 
         // Коэффициент траснпорта
-        static double ChoiceTransport(double result)
+        static int ChoiceTransport(double result)
         {
             Console.WriteLine("Выберите транспорт");
             Console.WriteLine("1. Легковой");
@@ -45,32 +96,32 @@ namespace SecondLabThirdVariant
             Console.WriteLine("3. Мотоцикл");
             Console.Write("\nВаш выбор: ");
 
+            int coefficient;
             string? choice = Console.ReadLine();
             switch (choice) {
                 case "1":
+                    coefficient = 0;
                     break;
 
                 case "2":
-                    result *= 1.2;
-                    Console.WriteLine("Транспортный коэффициент: +20%");
+                    coefficient = 20;
                     break;
 
                 case "3":
-                    result *= 0.85;
-                    Console.WriteLine("Транспортный коэффициент: -15%");
+                    coefficient = -15;
                     break;
 
                 default:
                     Console.WriteLine("Введите 1 или 2");
-                    result = ChoiceTransport(result);
+                    coefficient = ChoiceTransport(result);
                     break;
             }
 
-            return result;
+            return coefficient;
         }
 
         // Коэффициент сезона 
-        static double ChoiceSeason(double result)
+        static int ChoiceSeason(double result)
         {
 
             Console.WriteLine("Выберите сезон");
@@ -78,76 +129,71 @@ namespace SecondLabThirdVariant
             Console.WriteLine("2. Зима");
             Console.Write("\nВаш выбор: ");
 
+            int coefficient;
             string? choice = Console.ReadLine();
             switch (choice) {
                 case "1":
+                    coefficient = 0;
                     break;
 
                 case "2":
-                    result *= 1.2;
-                    Console.WriteLine("Сезонный коэффициент: +20%");
+                    coefficient = 20;
                     break;
 
                 default:
                     Console.WriteLine("Введите 1 или 2");
-                    result = ChoiceSeason(result);
+                    coefficient = ChoiceSeason(result);
                     break;
             }
 
-            return result;
+            return coefficient;
+        }
+
+        static void OutputResult(double[] values)
+        {
+            Console.WriteLine("=== Результаты расчета ===");
+            Console.WriteLine("Расход топлива: {0} л", values[0]);
+            Console.WriteLine("Стоимость топлива: {0} руб", values[1]);
+            Console.WriteLine("Транспортный коэффициент: {0}%", values[2]);
+            Console.WriteLine("Сезонный коэффициент: {0}%", values[3]);
+            Console.WriteLine("Итоговая стоимость: {0} руб", values[4]);
         }
 
         // Вариант 3
         static void TravelCost()
         {
-            Console.Clear();
+            bool isExit = false;
 
-            try {
-                double distance = DoubleParsing("Расстояние в км: ");
-                double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
-                double pricePerLiter = DoubleParsing("Цена за литр: ");
-
-                double fuelUsage = distance * (averageFuelUsage / 100);
-                double result = fuelUsage * pricePerLiter;
-
-                result = ChoiceTransport(result);
-                result = ChoiceSeason(result);
-
-                Console.WriteLine($"Цена поездки обойдётся в {result}");
-
-                Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
-                Console.ReadKey();
-            }
-            catch(DivideByZeroException) {
-
-            }
-            finally {
-                Console.WriteLine("Спасибо за использование калькулятора!");
-            }
-        }
-
-        static bool Exit(bool running, string message)
-        {
-
-            bool exit = false;
-
-            while (!exit)
-            {
+            while (!isExit) {
                 Console.Clear();
-                Console.Write(message);
-                string? confirm = Console.ReadLine()?.ToLower();
 
-                if (confirm == "y")
-                {
-                    running = false;
-                    exit = true; 
+                try {
+                    double distance = DoubleParsing("Расстояние в км: ");
+                    double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
+                    double pricePerLiter = DoubleParsing("Цена за литр: ");
+
+                    double fuelUsage = distance * (averageFuelUsage / 100);
+                    double result = fuelUsage * pricePerLiter;
+
+                    double transportCoefficient = (double)ChoiceTransport(result);
+                    double seasonCoefficient= (double)ChoiceSeason(result);
+
+                    result *= (1 + transportCoefficient / 100);
+                    result *= (1 + seasonCoefficient / 100);
+
+                    double[] values = {fuelUsage, pricePerLiter, transportCoefficient, seasonCoefficient, result};
+
+                    OutputResult(values);
+
+                    isExit = Continue(isExit, "Хотите сделать еще один расчет? [y/N]: ");
                 }
-                else if (confirm == "n")
-                {
-                    exit = true;
+                catch(DivideByZeroException) {
+
+                }
+                finally {
+                    Console.WriteLine("Спасибо за использование калькулятора!");
                 }
             }
-            return running;
         }
 
         static void ShowMenu()
@@ -171,7 +217,7 @@ namespace SecondLabThirdVariant
                     break;
                     
                 case "2":
-                    return Exit(isRun, "Вы точно хотите выйти? [y/n]: ");
+                    return Exit(isRun, "Вы точно хотите выйти? [Y/n]: ");
 
                 default:
                     break;
