@@ -36,6 +36,7 @@ namespace SecondLabThirdVariant
             return result;
         }
 
+        // Коэффициент траснпорта
         static double ChoiceTransport(double result)
         {
             Console.WriteLine("Выберите транспорт");
@@ -51,10 +52,12 @@ namespace SecondLabThirdVariant
 
                 case "2":
                     result *= 1.2;
+                    Console.WriteLine("Транспортный коэффициент: +20%");
                     break;
 
                 case "3":
                     result *= 0.85;
+                    Console.WriteLine("Транспортный коэффициент: -15%");
                     break;
 
                 default:
@@ -64,7 +67,8 @@ namespace SecondLabThirdVariant
             return result;
         }
 
-        static double ChoiceWeather(double result)
+        // Коэффициент сезона 
+        static double ChoiceSeason(double result)
         {
 
             Console.WriteLine("Выберите сезон");
@@ -79,9 +83,12 @@ namespace SecondLabThirdVariant
 
                 case "2":
                     result *= 1.2;
+                    Console.WriteLine("Сезонный коэффициент: +20%");
                     break;
 
                 default:
+                    Console.WriteLine("Введите 1 или 2");
+                    result = ChoiceSeason(result);
                     break;
             }
 
@@ -102,7 +109,7 @@ namespace SecondLabThirdVariant
                 double result = fuelUsage * pricePerLiter;
 
                 result = ChoiceTransport(result);
-                result = ChoiceWeather(result);
+                result = ChoiceSeason(result);
 
                 Console.WriteLine($"Цена поездки обойдётся в {result}");
 
@@ -117,15 +124,7 @@ namespace SecondLabThirdVariant
             }
         }
 
-        static void ShowMenu()
-        {
-            Console.WriteLine("=== Калькулятор стоимости поездки ===");
-            Console.WriteLine("1. Рассчитать поездку");
-            Console.WriteLine("2. Выйти");
-            Console.Write("\nВаш выбор: ");
-        }
-
-        static bool Exit(bool running)
+        static bool Exit(bool running, string message)
         {
 
             bool exit = false;
@@ -133,10 +132,10 @@ namespace SecondLabThirdVariant
             while (!exit)
             {
                 Console.Clear();
-                Console.Write("Вы точно хотите выйти? [Y/n]: ");
+                Console.Write(message);
                 string? confirm = Console.ReadLine()?.ToLower();
 
-                if (confirm == "" || confirm == "y")
+                if (confirm == "y")
                 {
                     running = false;
                     exit = true; 
@@ -145,12 +144,16 @@ namespace SecondLabThirdVariant
                 {
                     exit = true;
                 }
-                else
-                {
-                    
-                }
             }
             return running;
+        }
+
+        static void ShowMenu()
+        {
+            Console.WriteLine("=== Калькулятор стоимости поездки ===");
+            Console.WriteLine("1. Рассчитать поездку");
+            Console.WriteLine("2. Выйти");
+            Console.Write("\nВаш выбор: ");
         }
 
         static bool Menu(bool isRun)
@@ -165,7 +168,7 @@ namespace SecondLabThirdVariant
                     break;
                     
                 case "2":
-                    return Exit(isRun);
+                    return Exit(isRun, "Вы точно хотите выйти? [y/n]: ");
 
                 default:
                     break;
