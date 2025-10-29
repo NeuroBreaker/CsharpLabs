@@ -61,6 +61,8 @@ namespace SecondLabThirdVariant
                     break;
 
                 default:
+                    Console.WriteLine("Введите 1 или 2");
+                    result = ChoiceTransport(result);
                     break;
             }
 
@@ -165,6 +167,7 @@ namespace SecondLabThirdVariant
             switch (choice)
             {
                 case "1":
+                    TravelCost();
                     break;
                     
                 case "2":
