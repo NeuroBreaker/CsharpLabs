@@ -10,12 +10,14 @@ namespace SecondLabThirdVariant
         static double DoubleParsing(string message)
         {
             double result = 0;
+            string? text;
 
-            Console.Write(message);
-            while (!double.TryParse(Console.ReadLine(), out result))
-            {
+            do {
+
                 Console.Write(message);
+                text = Console.ReadLine();
             }
+            while (!double.TryParse(text, out result));
 
             return result;
         }
@@ -25,17 +27,25 @@ namespace SecondLabThirdVariant
         {
             Console.Clear();
 
-            double distance = DoubleParsing("Расстояние в км: ");
-            double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
-            double pricePerLiter = DoubleParsing("Цена за литр: ");
+            try {
+                double distance = DoubleParsing("Расстояние в км: ");
+                double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
+                double pricePerLiter = DoubleParsing("Цена за литр: ");
 
-            double fuelUsage = distance * (averageFuelUsage / 100);
-            double result = fuelUsage * pricePerLiter;
+                double fuelUsage = distance * (averageFuelUsage / 100);
+                double result = fuelUsage * pricePerLiter;
 
-            Console.WriteLine($"Цена поездки обойдётся в {result}");
+                Console.WriteLine($"Цена поездки обойдётся в {result}");
 
-            Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
-            Console.ReadKey();
+                Console.WriteLine("\nНажмите любую клавишу для продолжения ... ");
+                Console.ReadKey();
+            }
+            catch(DivideByZeroException) {
+
+            }
+            finally {
+                Console.WriteLine("Спасибо за использование калькулятора!");
+            }
         }
 
         static void ShowMenu()
