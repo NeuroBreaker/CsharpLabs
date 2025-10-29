@@ -15,7 +15,6 @@ namespace SecondLabThirdVariant
 
             while (!exit)
             {
-                Console.Clear();
                 Console.Write(message);
                 string? confirm = Console.ReadLine()?.ToLower();
 
@@ -60,6 +59,7 @@ namespace SecondLabThirdVariant
         // Будет отправлять повторно message, пока не запарсит вводимое число
         static int IntegerParsing(string message)
         {
+
             string? text;
             int result = 0;
             
@@ -67,28 +67,28 @@ namespace SecondLabThirdVariant
                 Console.WriteLine(message);
                 text = Console.ReadLine();
             }
-            while(!int.TryParse(text, out result));
+            while(!int.TryParse(text, out result) || result <= 0m);
 
             return result;
         }
 
         // Будет отправлять повторно message, пока не запарсит вводимое число
-        static double DoubleParsing(string message)
+        static decimal DoubleParsing(string message)
         {
-            double result = 0;
+            decimal result = 0m;
             string? text;
 
             do {
                 Console.Write(message);
                 text = Console.ReadLine();
             }
-            while (!double.TryParse(text, out result));
+            while (!decimal.TryParse(text, out result) || result <= 0m);
 
             return result;
         }
 
         // Коэффициент траснпорта
-        static int ChoiceTransport(double result)
+        static int ChoiceTransport(decimal result)
         {
             Console.WriteLine("Выберите транспорт");
             Console.WriteLine("1. Легковой");
@@ -121,7 +121,7 @@ namespace SecondLabThirdVariant
         }
 
         // Коэффициент сезона 
-        static int ChoiceSeason(double result)
+        static int ChoiceSeason(decimal result)
         {
 
             Console.WriteLine("Выберите сезон");
@@ -149,7 +149,7 @@ namespace SecondLabThirdVariant
             return coefficient;
         }
 
-        static void OutputResult(double[] values)
+        static void OutputResult(decimal[] values)
         {
             Console.WriteLine("=== Результаты расчета ===");
             Console.WriteLine("Расход топлива: {0} л", values[0]);
@@ -168,27 +168,31 @@ namespace SecondLabThirdVariant
                 Console.Clear();
 
                 try {
-                    double distance = DoubleParsing("Расстояние в км: ");
-                    double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
-                    double pricePerLiter = DoubleParsing("Цена за литр: ");
+                    decimal distance = DoubleParsing("Расстояние в км: ");
+                    decimal averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
+                    decimal pricePerLiter = DoubleParsing("Цена за литр: ");
 
-                    double fuelUsage = distance * (averageFuelUsage / 100);
-                    double result = fuelUsage * pricePerLiter;
+                    decimal fuelUsage = distance * (averageFuelUsage / 100);
+                    decimal result = fuelUsage * pricePerLiter;
 
-                    double transportCoefficient = (double)ChoiceTransport(result);
-                    double seasonCoefficient= (double)ChoiceSeason(result);
+                    decimal transportCoefficient = (decimal)ChoiceTransport(result);
+                    decimal seasonCoefficient= (decimal)ChoiceSeason(result);
 
                     result *= (1 + transportCoefficient / 100);
                     result *= (1 + seasonCoefficient / 100);
 
-                    double[] values = {fuelUsage, pricePerLiter, transportCoefficient, seasonCoefficient, result};
+                    decimal[] values = {fuelUsage, pricePerLiter, transportCoefficient, seasonCoefficient, result};
 
                     OutputResult(values);
 
                     isExit = Continue(isExit, "Хотите сделать еще один расчет? [y/N]: ");
                 }
-                catch(DivideByZeroException) {
-
+                catch (DivideByZeroException error) {
+                    Console.WriteLine(error);
+                }
+                catch (OverflowException error)
+                {
+                    Console.WriteLine(error);
                 }
                 finally {
                     Console.WriteLine("Спасибо за использование калькулятора!");
