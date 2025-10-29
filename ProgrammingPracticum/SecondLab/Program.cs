@@ -36,6 +36,58 @@ namespace SecondLabThirdVariant
             return result;
         }
 
+        static double ChoiceTransport(double result)
+        {
+            Console.WriteLine("Выберите транспорт");
+            Console.WriteLine("1. Легковой");
+            Console.WriteLine("2. Грузовик");
+            Console.WriteLine("3. Мотоцикл");
+            Console.Write("\nВаш выбор: ");
+
+            string? choice = Console.ReadLine();
+            switch (choice) {
+                case "1":
+                    break;
+
+                case "2":
+                    result *= 1.2;
+                    break;
+
+                case "3":
+                    result *= 0.85;
+                    break;
+
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
+        static double ChoiceWeather(double result)
+        {
+
+            Console.WriteLine("Выберите сезон");
+            Console.WriteLine("1. Лето");
+            Console.WriteLine("2. Зима");
+            Console.Write("\nВаш выбор: ");
+
+            string? choice = Console.ReadLine();
+            switch (choice) {
+                case "1":
+                    break;
+
+                case "2":
+                    result *= 1.2;
+                    break;
+
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
         // Вариант 3
         static void TravelCost()
         {
@@ -48,6 +100,9 @@ namespace SecondLabThirdVariant
 
                 double fuelUsage = distance * (averageFuelUsage / 100);
                 double result = fuelUsage * pricePerLiter;
+
+                result = ChoiceTransport(result);
+                result = ChoiceWeather(result);
 
                 Console.WriteLine($"Цена поездки обойдётся в {result}");
 
