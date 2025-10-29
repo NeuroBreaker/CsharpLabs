@@ -6,14 +6,28 @@ namespace SecondLabThirdVariant
 
     class Program
     {
+        // Будет отправлять повторно message, пока не запарсит вводимое число
+        static int IntegerParsing(string message)
+        {
+            string? text;
+            int result = 0;
+            
+            do {
+                Console.WriteLine(message);
+                text = Console.ReadLine();
+            }
+            while(!int.TryParse(text, out result));
 
+            return result;
+        }
+
+        // Будет отправлять повторно message, пока не запарсит вводимое число
         static double DoubleParsing(string message)
         {
             double result = 0;
             string? text;
 
             do {
-
                 Console.Write(message);
                 text = Console.ReadLine();
             }
