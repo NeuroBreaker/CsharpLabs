@@ -11,7 +11,6 @@ namespace FourthLab {
         const int PIXEL_SIZE = 15;
         static int[,] shape = new int[2, 4];
         static int[,] board = new int[WIDTH, HEIGHT];
-        static bool isRunning = true; // Глобальная переменная для главного цикла
     
         // Запрашивает ввод у пользователя и парсит его в double тип
         static double DoubleParsing(string message)
@@ -238,7 +237,7 @@ namespace FourthLab {
             Thread.Sleep(10);
         }
     
-        static void Exit()
+        static bool Exit(bool isRunning)
         {
             bool runnable = true;
     
@@ -251,7 +250,7 @@ namespace FourthLab {
                 if (confirm == "д" || confirm == "y"
                         || confirm == "" )
                 {
-                    isRunning = false;
+                    isRunning = !isRunning;
                     runnable = false;
                     Console.Clear();
                 }
@@ -269,9 +268,11 @@ namespace FourthLab {
                     Console.ReadKey();
                 }
             }
+
+            return isRunning;
         }
     
-        static void Run()
+        static bool Run(bool isRunning)
         {
             ShowMenu();
     
@@ -296,7 +297,7 @@ namespace FourthLab {
                     break;
 
                 case "5":
-                    Exit();
+                    isRunning = Exit(isRunning);
                     break;
     
                 default:
@@ -306,6 +307,8 @@ namespace FourthLab {
                     Console.ReadKey();
                     break;
             }
+
+            return isRunning;
         }
     
         static void Main()
@@ -313,9 +316,10 @@ namespace FourthLab {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding  = Encoding.UTF8;
     
+            bool isRunning = true;
             while(isRunning)
             {
-                Run();
+                isRunning = Run(isRunning);
             }
         }
     }
