@@ -10,7 +10,7 @@ namespace FourthLab {
         const int HEIGHT = 10;
         const int PIXEL_SIZE = 15;
         static int[,] shape = new int[2, 4];
-        static int[,] field = new int[WIDTH, HEIGHT];
+        static int[,] board = new int[WIDTH, HEIGHT];
         static bool isRunning = true; // Глобальная переменная для главного цикла
     
         // Запрашивает ввод у пользователя и парсит его в double тип
@@ -175,13 +175,28 @@ namespace FourthLab {
             Console.ReadKey();
         }
 
+        static void Draw()
+        {
+            int[,] displayBoard = (int[,])board.Clone();
+        }
+
         static void Game()
         {
-            int[] width = new int[WIDTH];
-            int[] height = new int[HEIGHT];
+            int[][,] shapes = new int[][,]
+            {
 
-            int[] player_x = new int[WIDTH];
-            int[] player_y = new int[HEIGHT];
+                new int[,] { {0, 1, 0}, {1, 1, 1} },
+                new int[,] { {1, 0, 0}, {1, 1, 1} },
+                new int[,] { {0, 0, 1}, {1, 1, 1} },
+                new int[,] { {1, 1, 0}, {0, 1, 1} },
+                new int[,] { {0, 1, 1}, {1, 1, 0} },
+                new int[,] { {1, 1} , {1, 1}}
+            };
+
+            Thread inputThread = new Thread(InputHandler);
+            inputThread.Start();
+
+            int[,] field = new int[WIDTH, HEIGHT];
 
             Random random = new Random();
             int randNum = random.Next(0, 10);
@@ -189,6 +204,38 @@ namespace FourthLab {
         
             Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
+        }
+
+        static void InputHandler()
+        {
+            if (Console.KeyAvailable)
+            {
+                var key = Console.ReadKey(true).Key; 
+                switch (key)
+                {
+                    case ConsoleKey.LeftArrow:
+                    case ConsoleKey.A:
+                        Console.WriteLine("a");
+                        break;
+
+
+                    case ConsoleKey.RightArrow:
+                    case ConsoleKey.D:
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                    case ConsoleKey.W:
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                    case ConsoleKey.S:
+                        break;
+
+                    case ConsoleKey.Escape:
+                        break;
+                }
+            }
+            Thread.Sleep(10);
         }
     
         static void Exit()
