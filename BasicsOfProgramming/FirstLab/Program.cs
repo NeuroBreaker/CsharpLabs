@@ -6,12 +6,13 @@ class Program
     static double DoubleParsing(string message)
     {
         double result;
+        string input;
 
-        Console.Write(message);
-        while (!double.TryParse(Console.ReadLine(), out result))
-        {
+        do {
             Console.Write(message);
+            input = Console.ReadLine();
         }
+        while(!double.TryParse(input, out result));
     
         return result;
     }
@@ -23,13 +24,11 @@ class Program
         // const double E = Math.E;
         const double PI = Math.PI;
 
-        double a, b;
-
         // 2 пункт
         Console.Clear();
 
-        a = DoubleParsing("Введите число a: ");
-        b = DoubleParsing("Введите число b: ");
+        double a = DoubleParsing("Введите число a: ");
+        double b = DoubleParsing("Введите число b: ");
 
         // 3 пункт
         double task2 = PI * (Math.Log(Math.Pow(b, 5)) / (Math.Sin(a) + 1));
