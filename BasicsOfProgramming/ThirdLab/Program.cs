@@ -8,15 +8,17 @@ namespace Lab3Variant2 {
     class Program
     {
     
+        // Запрашивает ввод у пользователя и парсит его в double тип
         static int IntegerParsing(string message)
         {
             int result;
+            string? input;
 
-            Console.Write(message);
-            while (!int.TryParse(Console.ReadLine(), out result))
-            {
+            do {
                 Console.Write(message);
+                input = Console.ReadLine();
             }
+            while (!int.TryParse(input, out result));
 
             return result;
         }
@@ -25,16 +27,18 @@ namespace Lab3Variant2 {
         static double DoubleParsing(string message)
         {
             double result;
+            string? input;
 
-            Console.Write(message);
-            while (!double.TryParse(Console.ReadLine(), out result))
-            {
+            do {
                 Console.Write(message);
+                input = Console.ReadLine();
             }
-    
+            while (!double.TryParse(input, out result));
+
             return result;
         }
 
+        // Выводит ✅/❌в консоль при передаче bool
         static void BoolHandler(bool boolean)
         {
 
@@ -47,16 +51,6 @@ namespace Lab3Variant2 {
                 Console.WriteLine("❌Неверно");
             }
         }
-
-        static void ShowMenu() 
-        {
-            Console.Clear();
-            Console.WriteLine("1. Отгадай ответ");
-            Console.WriteLine("2. Об авторе");
-            Console.WriteLine("3. Сортировка массива");
-            Console.WriteLine("4. Выход");
-            Console.Write("Ваш выбор: ");
-        }
     
         // Часть кода из первой лабораторной работы
         static double CalculateMethod(double a, double b)
@@ -68,10 +62,12 @@ namespace Lab3Variant2 {
             return Math.Round(result, 2);
         }
 
+        // Запрашивает ответ 3 раза, если
+        // ответ верный, то цикл прервётся
         static void Guess(double result)
         {
-            int i;
-            for (i = 3; i > 0; i--) 
+
+            for (int i = 3; i > 0; i--) 
             {
                 Console.WriteLine($"Количество попыток: {i}");
                 double guess = DoubleParsing("Ваш ответ(с округлением до двух знаков после запятой): ");
@@ -87,7 +83,7 @@ namespace Lab3Variant2 {
             }
         }
 
-        // Угадайка
+        // Метод, вызываемый при выборе из меню
         static void GuessAnswer() 
         {
             Console.Clear();
@@ -118,6 +114,25 @@ namespace Lab3Variant2 {
             Console.ReadKey();
         }
 
+        // Запрашивает размер массива, возвращает его
+        static int InputArraySize()
+        {
+            Console.Clear();
+
+            int arraySize;
+            do {
+                arraySize = IntegerParsing("Выберите размер для массива: ");
+
+                if (arraySize < 1)
+                {
+                    Console.WriteLine("Массив не может состоять из 0 и меньше элементов");
+                }
+            }
+            while(arraySize < 1);
+
+            return arraySize;
+        }
+
         // Заполнение массива случайными значениями
         static int[] FillArray(int[] array)
         {
@@ -130,6 +145,29 @@ namespace Lab3Variant2 {
             }
 
             return array;
+        }
+
+        // При вызове этого метода указывается размер создаваемого массива
+        // После этого он заполняется методом FillArray
+        static int[] ArrayInitialization(int size)
+        {
+            int[] array = new int[size];
+            FillArray(array);
+
+            return array;
+        }
+
+        // Возвращает клон передаваемого массива
+        static int[] CloneArray(int[] array)
+        {
+            int size = array.Length;
+            int[] cloneArray = new int[size];
+            for (int i = 0; i < size; i++)
+            {
+                cloneArray[i] = array[i];    
+            }
+
+            return cloneArray;
         }
 
         // Вывод массива в консоль
@@ -150,6 +188,7 @@ namespace Lab3Variant2 {
             }
         }
 
+        // Создаёт клон передаваемого массива, сортирует его методом пузырька и после возвращает
         static int[] BubbleSorting(int[] array)
         {
             int size = array.Length;
@@ -168,7 +207,8 @@ namespace Lab3Variant2 {
 
             return sortingArray;
         }
-
+        
+        // Создаёт клон передаваемого массива, сортирует его методом вставок и после возвращает
         static int[] InsertSorting(int[] array)
         {
             int size = array.Length;
@@ -186,43 +226,6 @@ namespace Lab3Variant2 {
             }
 
             return sortingArray;
-        }
-
-        // Ввод размера массива
-        static int InputArraySize()
-        {
-            int arraySize;
-            do {
-                arraySize = IntegerParsing("Выберите размер для массива: ");
-
-                if (arraySize < 1)
-                {
-                    Console.WriteLine("Массив не может состоять из 0 и меньше элементов");
-                }
-            }
-            while(arraySize < 1);
-
-            return arraySize;
-        }
-
-        static int[] ArrayInitialization(int size)
-        {
-            int[] array = new int[size];
-            FillArray(array);
-
-            return array;
-        }
-
-        static int[] CloneArray(int[] array)
-        {
-            int size = array.Length;
-            int[] cloneArray = new int[size];
-            for (int i = 0; i < size; i++)
-            {
-                cloneArray[i] = array[i];    
-            }
-
-            return cloneArray;
         }
 
         // Метод, который будет вызываться из меню
@@ -272,6 +275,7 @@ namespace Lab3Variant2 {
             Console.ReadKey();
         }
 
+        // Об авторе (вызывается из меню)
         static void AboutAuthor()
         {
             Console.Clear();
@@ -281,6 +285,9 @@ namespace Lab3Variant2 {
             Console.ReadKey();
         }
     
+        // Спрашивает хотите ли выйти до того момента
+        // пока не введёте
+        // y / Y / n / N / Enter(ничего)
         static bool Exit()
         {
             bool runnable = true;
@@ -315,7 +322,19 @@ namespace Lab3Variant2 {
             return false;
         }
     
-        static bool Run()
+        // Вывод меню в консоль
+        static void ShowMenu() 
+        {
+            Console.Clear();
+            Console.WriteLine("1. Отгадай ответ");
+            Console.WriteLine("2. Об авторе");
+            Console.WriteLine("3. Сортировка массива");
+            Console.WriteLine("4. Выход");
+            Console.Write("Ваш выбор: ");
+        }
+
+        // Меню с выбором
+        static bool Menu()
         {
             ShowMenu();
     
@@ -325,15 +344,15 @@ namespace Lab3Variant2 {
             {
                 case "1":
                     GuessAnswer();
-                    return false;
+                    break;
     
                 case "2":
                     AboutAuthor();
-                    return false;
+                    break;
 
                 case "3":
                     ArraysSorting();
-                    return false;
+                    break;
     
                 case "4":
                     return Exit();
@@ -343,10 +362,14 @@ namespace Lab3Variant2 {
                     Console.WriteLine("Соответствия не найдено");
                     Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
                     Console.ReadKey();
-                    return false;
+                    break;
             }
+
+            return false;
         }
     
+        // Точка входа в программу
+        // запускает цикл с меню
         static void Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -355,7 +378,7 @@ namespace Lab3Variant2 {
             bool isExit = false;
             while(!isExit)
             {
-                isExit = Run();
+                isExit = Menu();
             }
         }
     }
