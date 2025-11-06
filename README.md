@@ -14,4 +14,4 @@
 |                               | ThirdLab               |                             |                  |
 |                               |                        |                             |                  |
 | Практикум по программированию | FirstLab               |                             |                  |
-|                               | SecondLab              |
+|                               | SecondLab              |                             | ThirdLab         |
