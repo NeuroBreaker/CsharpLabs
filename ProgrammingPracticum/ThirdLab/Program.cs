@@ -1,7 +1,7 @@
 ﻿using System;
 
 // Третья лабораторная работа для 3 варианта
-namespace SecondLabThirdVariant
+namespace ThirdLabThirdVariant
 {
 
     class Program
