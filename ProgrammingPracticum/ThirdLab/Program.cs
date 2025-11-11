@@ -7,6 +7,13 @@ namespace ThirdLabThirdVariant
     class Program
     {
 
+        // Выводит message, ожидает Enter
+        static void WaitEnter(string message = "Введите Enter для продолжения ...")
+        {
+            Console.WriteLine(message);
+            Console.ReadLine();
+        }
+
         // Метод для продолжения
         static bool Continue(bool running, string message = "Хотите продолжить? [y/N]: ")
         {
@@ -73,22 +80,22 @@ namespace ThirdLabThirdVariant
         }
 
         // Будет отправлять повторно message, пока не запарсит вводимое число
-        static decimal DoubleParsing(string message)
+        static double DoubleParsing(string message)
         {
-            decimal result = 0m;
+            double result = 0;
             string? text;
 
             do {
                 Console.Write(message);
                 text = Console.ReadLine();
             }
-            while (!decimal.TryParse(text, out result) || result <= 0m);
+            while (!double.TryParse(text, out result) || result <= 0);
 
             return result;
         }
 
         // Коэффициент траснпорта
-        static int ChoiceTransport(decimal result)
+        static int ChoiceTransport(double result)
         {
             Console.WriteLine("Выберите транспорт");
             Console.WriteLine("1. Легковой");
@@ -121,7 +128,7 @@ namespace ThirdLabThirdVariant
         }
 
         // Коэффициент сезона 
-        static int ChoiceSeason(decimal result)
+        static int ChoiceSeason(double result)
         {
 
             Console.WriteLine("Выберите сезон");
@@ -150,7 +157,7 @@ namespace ThirdLabThirdVariant
         }
 
         // Вывод результата
-        static void OutputResult(decimal[] values)
+        static void OutputResult(double[] values)
         {
             Console.WriteLine("=== Результаты расчета ===");
             Console.WriteLine("Расход топлива: {0} л", values[0]);
@@ -160,8 +167,52 @@ namespace ThirdLabThirdVariant
             Console.WriteLine("Итоговая стоимость: {0} руб", values[4]);
         }
 
+        static void MoveElementsInDoubleArray(double element, double[] array)
+        {
+            int size = array.Length;
+            for (int i = size - 2; i >= 0; i--)
+            {
+                array[i + 1] = array[i];
+            }
+
+            array[0] = element;
+        }
+
+        static void MoveElementsInStringArray(string element, string[] array)
+        {
+            int size = array.Length;
+            for (int i = size - 2; i >= 0; i--)
+            {
+                array[i + 1] = array[i];
+            }
+
+            array[0] = element;
+        }
+
+        static void ViewHistory(in int index, double[] distances, string[] vehicleTypes, string[] seasons, double[] totalCosts, string[] dates)
+        {
+            Console.Clear();
+            if (index == 0) 
+            {
+                Console.WriteLine("Вы не использовали калькулятор до этого");
+            }
+            else
+            {
+                for (int i = 0; i < index; i++)
+                {
+                    Console.Write($"{i + 1}\t");
+                    Console.Write($"{distances[i]}\t");
+                    Console.Write($"{vehicleTypes[i]}\t");
+                    Console.Write($"{seasons[i]}\t");
+                    Console.Write($"{totalCosts[i]}\t");
+                    Console.WriteLine($"{dates[i]}");
+                }
+            }
+            WaitEnter();
+        }
+
         // Основной метод
-        static void TravelCost()
+        static void TravelCost(ref int index, double[] distances, string[] vehicleTypes, string[] seasons, double[] totalCosts, string[] dates)
         {
             bool isRunning = false;
 
@@ -169,22 +220,54 @@ namespace ThirdLabThirdVariant
                 Console.Clear();
 
                 try {
-                    decimal distance = DoubleParsing("Расстояние в км: ");
-                    decimal averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
-                    decimal pricePerLiter = DoubleParsing("Цена за литр: ");
+                    double distance = DoubleParsing("Расстояние в км: ");
+                    MoveElementsInDoubleArray(distance, distances);
+                    
+                    double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
+                    double pricePerLiter = DoubleParsing("Цена за литр: ");
 
-                    decimal fuelUsage = distance * (averageFuelUsage / 100);
-                    decimal result = fuelUsage * pricePerLiter;
+                    double fuelUsage = distance * (averageFuelUsage / 100);
+                    double result = fuelUsage * pricePerLiter;
 
-                    decimal transportCoefficient = (decimal)ChoiceTransport(result);
-                    decimal seasonCoefficient= (decimal)ChoiceSeason(result);
+                    string transport;
+                    double transportCoefficient = (double)ChoiceTransport(result);
+                    if (transportCoefficient == 0)
+                    {
+                        transport = "Легковой";
+                    }
+                    else if (transportCoefficient == 20)
+                    {
+                        transport = "Грузовик";
+                    }
+                    else
+                    {
+                        transport = "Мотоцикл";
+                    }
+                    
+                    MoveElementsInStringArray(transport, vehicleTypes);
+
+                    string season;
+                    double seasonCoefficient= (double)ChoiceSeason(result);
+                    if (seasonCoefficient == 0)
+                    {
+                        season = "Лето";
+                    }
+                    else
+                    {
+                        season = "Зима";
+                    }
+
+                    MoveElementsInStringArray(season, seasons);
 
                     result *= (1 + transportCoefficient / 100);
                     result *= (1 + seasonCoefficient / 100);
 
-                    decimal[] values = {fuelUsage, pricePerLiter, transportCoefficient, seasonCoefficient, result};
+                    MoveElementsInDoubleArray(result, totalCosts);
+                    MoveElementsInStringArray(DateTime.Now.ToString("G"), dates);
+                    double[] values = {fuelUsage, pricePerLiter, transportCoefficient, seasonCoefficient, result};
 
                     OutputResult(values);
+                    index++;
 
                     isRunning = Continue(isRunning, "Хотите сделать еще один расчет? [y/N]: ");
                 }
@@ -206,44 +289,55 @@ namespace ThirdLabThirdVariant
         {
             Console.WriteLine("=== Калькулятор стоимости поездки ===");
             Console.WriteLine("1. Рассчитать поездку");
-            Console.WriteLine("2. Выйти");
+            Console.WriteLine("2. История");
+            Console.WriteLine("3. Выйти");
             Console.Write("\nВаш выбор: ");
         }
 
         // Меню
-        static bool Menu()
+        static bool Menu(ref int index, double[] distances, string[] vehicleTypes, string[] seasons, double[] totalCosts, string[] dates)
         {
+
             Console.Clear();
             ShowMenu();
 
-            bool isRunning = true;
+            bool isRepeat = true;
 
             string? choice = Console.ReadLine();
             switch (choice)
             {
                 case "1":
-                    TravelCost();
+                    TravelCost(ref index, distances, vehicleTypes, seasons, totalCosts, dates);
                     break;
                     
                 case "2":
-                    isRunning = Exit(isRunning);
+                    ViewHistory(index, distances, vehicleTypes, seasons, totalCosts, dates);
+                    break;
+
+                case "3":
+                    isRepeat = Exit(isRepeat);
                     break;
 
                 default:
                     break;
             }
-            return isRunning;
+            return isRepeat;
         }
 
         // Точка входа в программу
         static void Main(string[] args)
         {
-            
-            bool isRunning = true;
+            double[] distances = new double[10];
+            string[] vehicleTypes = new string[10];
+            string[] seasons = new string[10];
+            double[] totalCosts = new double[10];
+            string[] dates = new string[10];
+            int index = 0;
 
+            bool isRunning = true;
             while (isRunning)
             {
-                isRunning = Menu();
+                isRunning = Menu(ref index, distances, vehicleTypes, seasons, totalCosts, dates);
             }
         }
     }
