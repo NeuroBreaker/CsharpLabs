@@ -3,7 +3,8 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Lab3Variant2 {
+namespace Lab4Variant2
+{
 
     class Program
     {
@@ -114,6 +115,16 @@ namespace Lab3Variant2 {
             Console.ReadKey();
         }
 
+        // Об авторе (вызывается из меню)
+        static void AboutAuthor()
+        {
+            Console.Clear();
+            Console.WriteLine("Сделал Anon Anonovich");
+            Console.WriteLine("группа ananisti");
+            Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
+            Console.ReadKey();
+        }
+    
         // Запрашивает размер массива, возвращает его
         static int InputArraySize()
         {
@@ -273,16 +284,18 @@ namespace Lab3Variant2 {
             Console.ReadKey();
         }
 
-        // Об авторе (вызывается из меню)
-        static void AboutAuthor()
+        // Метод для отрисовки
+        static void Draw(int)
         {
-            Console.Clear();
-            Console.WriteLine("Сделал Anon Anonovich");
-            Console.WriteLine("группа ananisti");
-            Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
-            Console.ReadKey();
+            
         }
-    
+
+        // Метод, вызываемый из меню (точка входа всех методов для тетриса)
+        static void Tetris()
+        {
+
+        }
+
         // Спрашивает хотите ли выйти до того момента
         // пока не введёте
         // y / Y / n / N / Enter(ничего)
@@ -327,7 +340,8 @@ namespace Lab3Variant2 {
             Console.WriteLine("1. Отгадай ответ");
             Console.WriteLine("2. Об авторе");
             Console.WriteLine("3. Сортировка массива");
-            Console.WriteLine("4. Выход");
+            Console.WriteLine("4. Тетрис");
+            Console.WriteLine("5. Выход");
             Console.Write("Ваш выбор: ");
         }
 
@@ -353,6 +367,10 @@ namespace Lab3Variant2 {
                     break;
     
                 case "4":
+                    Tetris();
+                    break;
+
+                case "5":
                     return Exit();
     
                 default:
