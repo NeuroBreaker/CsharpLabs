@@ -284,16 +284,97 @@ namespace Lab4Variant2
             Console.ReadKey();
         }
 
-        // Метод для отрисовки
-        static void Draw(int)
+        // Метод для получения цвета
+        static ConsoleColor GetColor(int colorNum)
         {
+            switch (colorNum)
+            {
+                case 1: return ConsoleColor.Cyan;
+                case 2: return ConsoleColor.Yellow;
+                case 3: return ConsoleColor.Magenta;
+                case 4: return ConsoleColor.Green;
+                case 5: return ConsoleColor.Red;
+                case 6: return ConsoleColor.Blue;
+                case 7: return ConsoleColor.DarkYellow;
+                default: return ConsoleColor.White;
+            }
+        }
+
+        // Метод для отрисовки
+        static void Draw(int[,] board)
+        {
+            int[,] drawBoard = (int[,])board.Clone();
+
+            // Добавляем текущую фигуру
+            // for (int row = 0; row < currentPiece.GetLength(0); row++)
+            // {
+            //     for (int col = 0; col < currentPiece.GetLength(1); col++)
+            //     {
+            //         if (currentPiece[row, col] == 1)
+            //         {
+            //             int y = currentY + row;
+            //             int x = currentX + col;
+            //             if (y >= 0 && y < BoardHeight && x >= 0 && x < BoardWidth)
+            //             {
+            //                 displayBoard[y, x] = currentColor;
+            //             }
+            //         }
+            //     }
+            // }
+
             
+            // Рисуем верхнюю границу
+            Console.Write("╔");
+            for (int i = 0; i < board.GetLength(1) * 2; i++) Console.Write("═");
+            Console.WriteLine("╗");
+            
+            // Рисуем поле
+            for (int row = 0; row < board.GetLength(0); row++)
+            {
+                Console.Write("║");
+                for (int col = 0; col < board.GetLength(1); col++)
+                {
+                    int cell = drawBoard[row, col];
+                    if (cell == 0)
+                    {
+                        Console.Write("  ");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = GetColor(cell);
+                        Console.Write("██");
+                        Console.ResetColor();
+                    }
+                }
+                Console.WriteLine("║");
+            }
+
+            // Рисуем нижнюю границу
+            Console.Write("╚");
+            for (int i = 0; i < board.GetLength(1) * 2; i++) Console.Write("═");
+            Console.WriteLine("╝");
         }
 
         // Метод, вызываемый из меню (точка входа всех методов для тетриса)
         static void Tetris()
         {
 
+            Console.Clear();
+
+            const int HEIGHT = 20;
+            const int WIDTH = 10;
+            int[,] board = new int[HEIGHT, WIDTH];
+            int[,] shape = { {1, 1}, {1, 1} };
+            int[,] shapeT = { {0, 1, 0}, {1, 1, 1} };
+            Console.WriteLine(shapeT.GetLength(0));
+            Console.WriteLine(shapeT.GetLength(1));
+
+            while(true)
+            {
+                Console.Clear();
+                Draw(board);
+                Thread.Sleep(1000);
+            }
         }
 
         // Спрашивает хотите ли выйти до того момента
