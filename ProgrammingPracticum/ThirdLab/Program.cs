@@ -7,6 +7,8 @@ namespace ThirdLabThirdVariant
     class Program
     {
 
+        static History History1 = new History();
+
         // Выводит message, ожидает Enter
         static void WaitEnter(string message = "Введите Enter для продолжения ...")
         {
@@ -95,65 +97,82 @@ namespace ThirdLabThirdVariant
         }
 
         // Коэффициент траснпорта
-        static int ChoiceTransport(double result)
+        static string ChoiceTransport()
         {
-            Console.WriteLine("Выберите транспорт");
-            Console.WriteLine("1. Легковой");
-            Console.WriteLine("2. Грузовик");
-            Console.WriteLine("3. Мотоцикл");
-            Console.Write("\nВаш выбор: ");
 
-            int coefficient;
-            string? choice = Console.ReadLine();
-            switch (choice) {
-                case "1":
-                    coefficient = 0;
-                    break;
+            string transport = "Нету";
 
-                case "2":
-                    coefficient = 20;
-                    break;
+            bool continueLoop = true;
+            while (continueLoop)
+            {
 
-                case "3":
-                    coefficient = -15;
-                    break;
+                Console.WriteLine("Выберите транспорт");
+                Console.WriteLine("1. Легковой");
+                Console.WriteLine("2. Грузовик");
+                Console.WriteLine("3. Мотоцикл");
+                Console.Write("\nВаш выбор: ");
 
-                default:
-                    Console.WriteLine("Введите 1 или 2");
-                    coefficient = ChoiceTransport(result);
-                    break;
+                string? choice = Console.ReadLine();
+                switch (choice?.Trim()) {
+                    case "1":
+                        transport = "Легковой";
+                        continueLoop = false;
+                        break;
+
+                    case "2":
+                        transport = "Грузовик";
+                        continueLoop = false;
+                        break;
+
+                    case "3":
+                        transport = "Мотоцикл";
+                        continueLoop = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("\nНеверный ввод, нажмите любую клавишу для продолжения ...");
+                        Console.ReadKey();
+                        break;
+                }
             }
 
-            return coefficient;
+            return transport;
         }
 
         // Коэффициент сезона 
-        static int ChoiceSeason(double result)
+        static string ChoiceSeason()
         {
 
-            Console.WriteLine("Выберите сезон");
-            Console.WriteLine("1. Лето");
-            Console.WriteLine("2. Зима");
-            Console.Write("\nВаш выбор: ");
+            string season = "Нету";
 
-            int coefficient;
-            string? choice = Console.ReadLine();
-            switch (choice) {
-                case "1":
-                    coefficient = 0;
-                    break;
+            bool isContinue = true;
+            while (isContinue)
+            {
+                Console.WriteLine("Выберите сезон");
+                Console.WriteLine("1. Лето");
+                Console.WriteLine("2. Зима");
+                Console.Write("\nВаш выбор: ");
 
-                case "2":
-                    coefficient = 20;
-                    break;
+                string? choice = Console.ReadLine();
+                switch (choice?.Trim()) {
+                    case "1":
+                        season = "Лето";
+                        isContinue = false;
+                        break;
 
-                default:
-                    Console.WriteLine("Введите 1 или 2");
-                    coefficient = ChoiceSeason(result);
-                    break;
+                    case "2":
+                        season = "Зима";
+                        isContinue = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("\nНеверный выбор, введите любую клавишу для продолжения ...");
+                        Console.ReadKey();
+                        break;
+                }
             }
 
-            return coefficient;
+            return season;
         }
 
         // Вывод результата
@@ -168,25 +187,6 @@ namespace ThirdLabThirdVariant
             Console.WriteLine("╰──────────────────────────────────────────╯");
         }
 
-        static void MoveElementsInArray(double element, double[] array)
-        {
-            for (int i = 0; i < History.Index - 1 && History.Index == 10; i--)
-            {
-                array[i] = array[i + 1];
-            }
-
-            array[History.Index] = element;
-        }
-
-        static void MoveElementsInArray(string element, string[] array)
-        {
-            for (int i = 0; i < History.Index - 1 && History.Index == 10; i--)
-            {
-                array[i] = array[i + 1];
-            }
-
-            array[History.Index] = element;
-        }
 
         // Основной метод
         static void TravelCost()
@@ -198,65 +198,43 @@ namespace ThirdLabThirdVariant
 
                 try {
                     double distance = DoubleParsing("Расстояние в км: ");
-                    MoveElementsInArray(distance, History.distances);
-                    
                     double averageFuelUsage = DoubleParsing("Средний расход топлива на 100км: ");
                     double pricePerLiter = DoubleParsing("Цена за литр: ");
 
                     double fuelUsage = Math.Round(distance * (averageFuelUsage / 100), 2);
-                    double result = fuelUsage * pricePerLiter;
+                    double cost = fuelUsage * pricePerLiter;
 
-                    string transport;
-                    double transportCoefficient = (double)ChoiceTransport(result);
-                    if (transportCoefficient == 0)
+                    string transport = ChoiceTransport();
+                    double transportCoefficient = transport switch
                     {
-                        transport = "Легковой";
-                    }
-                    else if (transportCoefficient == 20)
+                        "Легковой" => 0,
+                        "Грузовик" => 20,
+                        "Мотоцикл" => -15,
+                        _ => 0
+                    };
+
+                    string season = ChoiceSeason();
+                    double seasonCoefficient = season switch
                     {
-                        transport = "Грузовик";
-                    }
-                    else
-                    {
-                        transport = "Мотоцикл";
-                    }
+                        "Лето" => 0,
+                        "Зима" => 20,
+                        _ => 0
+                    };
+
+
+                    cost *= (1 + transportCoefficient / 100);
+                    cost *= (1 + seasonCoefficient / 100);
+                    cost = Math.Round(cost, 2);
+
+                    History1.AddRecord(distance, transport, season, cost, DateTime.Now);
                     
-                    MoveElementsInArray(transport, History.vehicleTypes);
-
-                    string season;
-                    double seasonCoefficient= (double)ChoiceSeason(result);
-                    if (seasonCoefficient == 0)
-                    {
-                        season = "Лето";
-                    }
-                    else
-                    {
-                        season = "Зима";
-                    }
-
-                    MoveElementsInArray(season, History.seasons);
-
-                    result *= (1 + transportCoefficient / 100);
-                    result *= (1 + seasonCoefficient / 100);
-                    result = Math.Round(result, 2);
-
-                    MoveElementsInArray(result, History.totalCosts);
-                    MoveElementsInArray(DateTime.Now.ToString("G"), History.dates);
-                    double[] values = {fuelUsage, pricePerLiter, transportCoefficient, seasonCoefficient, result};
+                    double[] values = {fuelUsage, pricePerLiter, transportCoefficient, seasonCoefficient, cost};
 
                     OutputResult(values);
-                    if (History.Index < 10)
-                    {
-                        History.Index++;
-                    }
 
                     isRunning = Continue(isRunning, "Хотите сделать еще один расчет? [y/N]: ");
                 }
                 catch (DivideByZeroException error) {
-                    Console.WriteLine(error);
-                }
-                catch (OverflowException error)
-                {
                     Console.WriteLine(error);
                 }
                 finally {
@@ -293,7 +271,7 @@ namespace ThirdLabThirdVariant
                     break;
                     
                 case "2":
-                    History.DrawHistory();
+                    History1.Show();
                     break;
 
                 case "3":
