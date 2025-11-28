@@ -88,24 +88,25 @@ class History
 
     private void DrawHeader()
     {
-        Console.Write(Vertical);
-        Console.Write(currentSortOrder == SortOrder.Index ? "▾▴" : " ");
-        Console.Write("№");
+        Console.Write(Vertical, " ");
+        Console.Write(currentSortOrder == SortOrder.Index ? "▾ " : "  ");
+        Console.Write("№   ");
         Console.Write(currentSortOrder == SortOrder.Distance ? "▾" : " ");
-        Console.Write("Расстояние");
+        Console.Write("Расстояние       ");
         Console.Write(currentSortOrder == SortOrder.Transport ? "" : ""); 
-        Console.Write("Машина");
+        Console.Write("Машина      ");
         Console.Write(currentSortOrder == SortOrder.Season ? "" : "");
-        Console.Write("Сезон");
-        Console.Write(currentSortOrder == SortOrder.Date ? "▾" : " ");
-        Console.Write("Дата");
+        Console.Write("Сезон     ");
+        Console.Write(currentSortOrder == SortOrder.Date ? "▴" : " ");
+        Console.Write("Дата       ");
         Console.WriteLine(Vertical);
     }
 
     private void DrawRecord(HistoryRecord record)
     {
         Console.Write(Vertical);
-        Console.Write($" {record.Id + 1, 2}\t");
+        Console.Write($" {record.Id + 1, 2}");
+        Console.Write($" {record.Distance, 5}");
         Console.Write($"  {record.VehicleType,-15}");
         Console.Write($"  {record.Season,-12}");
         Console.Write($"  {record.TotalCost,8:F2} руб ");
@@ -113,10 +114,12 @@ class History
         Console.WriteLine(Vertical);
     }
 
-    // private List<HistoryRecord> SortedHistory()
-    // {
-    //
-    // }
+    private List<HistoryRecord> SortedHistory()
+    {
+        Console.WriteLine("Need refactor"); 
+
+        return null;
+    }
 
     private void DrawTable()
     {

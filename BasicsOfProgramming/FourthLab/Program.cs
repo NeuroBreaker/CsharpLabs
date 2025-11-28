@@ -300,6 +300,11 @@ namespace Lab4Variant2
             }
         }
 
+        static void SpawnShape()
+        {
+
+        }
+
         // Метод для отрисовки
         static void Draw(int[,] board)
         {
