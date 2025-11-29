@@ -284,6 +284,20 @@ namespace Lab4Variant2
             Console.ReadKey();
         }
 
+        static ConsoleColor currentColor;
+        static bool GameOver = false;
+        static int Score = 0;
+
+        static int[][,] Pieces = {
+            new int[,] { {1,1,1,1} },
+            new int[,] { {1,1}, {1,1} },
+            new int[,] { {0,1,0}, {1,1,1} },
+            new int[,] { {0,1,1}, {1,1,0} },
+            new int[,] { {1,1,0}, {0,1,1} },
+            new int[,] { {1,0,0}, {1,1,1} },
+            new int[,] { {0,0,1}, {1,1,1} }
+        };
+
         // Метод для получения цвета
         static ConsoleColor GetColor(int colorNum)
         {
@@ -300,9 +314,13 @@ namespace Lab4Variant2
             }
         }
 
-        static void SpawnShape()
+        static int[,] SpawnPiece()
         {
-
+            Random random = new Random();
+            int pieceIndex = random.Next(Pieces.Length);
+            int[,] piece = (int[,])Pieces[pieceIndex].Clone();
+            currentColor = GetColor(pieceIndex + 1);
+            return piece;
         }
 
         // Метод для отрисовки
@@ -360,6 +378,25 @@ namespace Lab4Variant2
             Console.WriteLine("╝");
         }
 
+        // Обработка ввода
+        static Thread HandleInput()
+        {
+            while (!GameOver)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKey key = Console.ReadKey(true).Key;
+
+                    switch (key)
+                    {
+                        case ConsoleKey.UpArrow:
+                        case ConsoleKey.W:
+                            break;
+                    }
+                }
+            }
+        }
+
         // Метод, вызываемый из меню (точка входа всех методов для тетриса)
         static void Tetris()
         {
@@ -368,18 +405,27 @@ namespace Lab4Variant2
 
             const int HEIGHT = 20;
             const int WIDTH = 10;
-            int[,] board = new int[HEIGHT, WIDTH];
-            int[,] shape = { {1, 1}, {1, 1} };
-            int[,] shapeT = { {0, 1, 0}, {1, 1, 1} };
-            Console.WriteLine(shapeT.GetLength(0));
-            Console.WriteLine(shapeT.GetLength(1));
 
-            while(true)
+            int[,] board = new int[HEIGHT, WIDTH];
+
+            Thread inputThread = new Thread(HandleInput);
+
+            bool gameOver = false;
+            while (!gameOver)
             {
                 Console.Clear();
                 Draw(board);
                 Thread.Sleep(1000);
             }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\n╔═══════════════════════╗");
+            Console.WriteLine($"║   ИГРА ОКОНЧЕНА!      ║");
+            Console.WriteLine($"║   Счёт: {Score,-14}║");
+            Console.WriteLine($"╚═══════════════════════╝");
+            Console.ResetColor();
+            Console.WriteLine("\nНажмите любую клавишу для выхода...");
+            Console.ReadKey();
         }
 
         // Спрашивает хотите ли выйти до того момента
@@ -431,6 +477,9 @@ namespace Lab4Variant2
             Console.Write("Ваш выбор: ");
         }
 
+        /// <summary>
+        /// Основное меню
+        /// </summary>
         // Меню с выбором
         static bool Menu()
         {
@@ -469,7 +518,7 @@ namespace Lab4Variant2
 
             return false;
         }
-    
+
         // Точка входа в программу
         // запускает цикл с меню
         static void Main()
