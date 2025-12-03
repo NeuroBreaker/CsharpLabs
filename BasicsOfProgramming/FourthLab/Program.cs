@@ -285,6 +285,9 @@ namespace Lab4Variant2
         }
 
         static ConsoleColor currentColor;
+        static int[,] currentPiece;
+        static int currentX;
+        static int currentY;
         static bool GameOver = false;
         static int Score = 0;
 
@@ -311,6 +314,20 @@ namespace Lab4Variant2
                 case 6: return ConsoleColor.Blue;
                 case 7: return ConsoleColor.DarkYellow;
                 default: return ConsoleColor.White;
+            }
+        }
+
+        static bool CheckCollision(int x, int y, int[,] piece)
+        {
+            for (int row = 0; row < piece.GetLength(0); row++)
+            {
+                for (int column = 0; column < piece.GetLength(1); column++)
+                {
+                    if (piece[row, column] == 1)
+                    {
+
+                    }
+                }
             }
         }
 
@@ -379,7 +396,7 @@ namespace Lab4Variant2
         }
 
         // Обработка ввода
-        static Thread HandleInput()
+        static void HandleInput()
         {
             while (!GameOver)
             {
@@ -389,8 +406,48 @@ namespace Lab4Variant2
 
                     switch (key)
                     {
+                        case ConsoleKey.LeftArrow:
+                        case ConsoleKey.A:
+                            if (!CheckCollision(currentX, currentY, currentPiece))
+                            {
+                                Move(currentX - 1);
+                            }
+                            break;
+
                         case ConsoleKey.UpArrow:
                         case ConsoleKey.W:
+                            if (!CheckCollision(currentX, currentY, currentPiece))
+                            {
+                                RotatePiece();
+                            }
+                            break;
+
+                        case ConsoleKey.RightArrow:
+                        case ConsoleKey.D:
+                            if (!CheckCollision(currentX, currentY, currentPiece))
+                            {
+                                Move(currentX + 1);
+                            }
+                            break;
+
+                        case ConsoleKey.DownArrow:
+                        case ConsoleKey.S:
+                            if (!CheckCollision(currentX, currentY, currentPiece))
+                            {
+                                SoftDrop();
+                            }
+                            break;
+
+                        case ConsoleKey.Spacebar:
+                        case ConsoleKey.Enter:
+                            while (!CheckCollision(currentX, currentY, currentPiece))
+                            {
+                                HardDrop();
+                            }
+                            break;
+
+                        case ConsoleKey.Escape:
+                            GameOver = true;
                             break;
                     }
                 }
