@@ -284,10 +284,17 @@ namespace Lab4Variant2
             Console.ReadKey();
         }
 
+        const int BoardWidth = 10;
+        const int BoardHeight = 20;
+        static int[,] board = new int[BoardWidth, BoardHeight]; 
+
         static ConsoleColor currentColor;
+        static Random random = new Random();
+
         static int[,] currentPiece;
         static int currentX;
         static int currentY;
+
         static bool GameOver = false;
         static int Score = 0;
 
@@ -300,6 +307,20 @@ namespace Lab4Variant2
             new int[,] { {1,0,0}, {1,1,1} },
             new int[,] { {0,0,1}, {1,1,1} }
         };
+
+        static void SpawnPiece()
+        {
+            int pieceIndex = random.Next(Pieces.Length);
+            currentPiece = (int[,])Pieces[pieceIndex].Clone();
+            currentColor = GetColor(pieceIndex + 1);
+            currentX = BoardWidth / 2;
+            currentY = 0;
+            
+            if (CheckCollision(currentX, currentY, currentPiece))
+            {
+                GameOver = true;
+            }
+        }
 
         // Метод для получения цвета
         static ConsoleColor GetColor(int colorNum)
@@ -325,7 +346,15 @@ namespace Lab4Variant2
                 {
                     if (piece[row, column] == 1)
                     {
+                        boardX = currentX + row;
+                        boardY = currentY + column;
 
+                        if (currentX < 0 || currentX >= BoardWidth ||
+                            currentY >= BoardHeight ||
+                            (currentY >= 0 && board[boardY, boardX] != 0))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -395,6 +424,18 @@ namespace Lab4Variant2
             Console.WriteLine("╝");
         }
 
+        static void PlacePiece()
+        {
+            for (int row = 0; row < BoardWidth; row++)
+            {
+                for (int column = 0; column < BoardHeight; column++)
+                {
+                    if ()
+                    {}
+                }
+            }
+        }
+
         // Обработка ввода
         static void HandleInput()
         {
@@ -408,7 +449,7 @@ namespace Lab4Variant2
                     {
                         case ConsoleKey.LeftArrow:
                         case ConsoleKey.A:
-                            if (!CheckCollision(currentX, currentY, currentPiece))
+                            if (!CheckCollision(currentX, currentY + 1, currentPiece))
                             {
                                 Move(currentX - 1);
                             }
@@ -424,7 +465,7 @@ namespace Lab4Variant2
 
                         case ConsoleKey.RightArrow:
                         case ConsoleKey.D:
-                            if (!CheckCollision(currentX, currentY, currentPiece))
+                            if (!CheckCollision(currentX, currentY + 1, currentPiece))
                             {
                                 Move(currentX + 1);
                             }
@@ -432,18 +473,14 @@ namespace Lab4Variant2
 
                         case ConsoleKey.DownArrow:
                         case ConsoleKey.S:
-                            if (!CheckCollision(currentX, currentY, currentPiece))
-                            {
-                                SoftDrop();
-                            }
+                            if (!CheckCollision(currentX, currentY + 1, currentPiece))
+                                currentY++;
                             break;
 
                         case ConsoleKey.Spacebar:
                         case ConsoleKey.Enter:
-                            while (!CheckCollision(currentX, currentY, currentPiece))
-                            {
-                                HardDrop();
-                            }
+                            while (!CheckCollision(currentX, currentY + 1, currentPiece))
+                                currentY++;
                             break;
 
                         case ConsoleKey.Escape:
@@ -451,6 +488,7 @@ namespace Lab4Variant2
                             break;
                     }
                 }
+                Thread.Sleep(16);
             }
         }
 
@@ -459,11 +497,6 @@ namespace Lab4Variant2
         {
 
             Console.Clear();
-
-            const int HEIGHT = 20;
-            const int WIDTH = 10;
-
-            int[,] board = new int[HEIGHT, WIDTH];
 
             Thread inputThread = new Thread(HandleInput);
 
