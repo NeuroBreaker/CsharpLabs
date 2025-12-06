@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Diagnostics;
-using System.Threading;
 
 namespace Lab3Variant2 {
 
