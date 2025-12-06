@@ -6,7 +6,7 @@ class Program
     static double DoubleParsing(string message)
     {
         double result;
-        string input;
+        string? input;
 
         do {
             Console.Write(message);
