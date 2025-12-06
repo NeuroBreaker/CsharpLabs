@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 class HistoryRecord {
     
@@ -35,8 +34,8 @@ class History
     private const string Vertical = "│";
     private const int TableWidth = 94;
 
-    private static List<HistoryRecord> records;
-    private static SortOrder currentSortOrder;
+    private readonly List<HistoryRecord> _records;
+    private SortOrder _currentSortOrder;
 
     private enum SortOrder
     {
@@ -51,8 +50,8 @@ class History
 
     public History()
     {
-        records = new List<HistoryRecord>();
-        currentSortOrder = SortOrder.Index;
+        _records = new List<HistoryRecord>();
+        _currentSortOrder = SortOrder.Index;
     }
 
     public void AddRecord(double distance, string vehicle, string season, double totalCost, DateTime date)
@@ -64,7 +63,7 @@ class History
             throw new ArgumentException("Итоговая цена не должна быть меньше 0", nameof(totalCost));
 
         HistoryRecord record = new HistoryRecord(
-            records.Count + 1,
+            _records.Count + 1,
             distance,
             vehicle,
             season,
@@ -72,7 +71,7 @@ class History
             date
         );
 
-        records.Add(record);
+        _records.Add(record);
     }
 
     private void DrawHorizontal(string left, string right)
@@ -89,15 +88,15 @@ class History
     private void DrawHeader()
     {
         Console.Write(Vertical, " ");
-        Console.Write(currentSortOrder == SortOrder.Index ? "▾ " : "  ");
+        Console.Write(_currentSortOrder == SortOrder.Index ? "▾ " : "  ");
         Console.Write("№   ");
-        Console.Write(currentSortOrder == SortOrder.Distance ? "▾" : " ");
+        Console.Write(_currentSortOrder == SortOrder.Distance ? "▾" : " ");
         Console.Write("Расстояние       ");
-        Console.Write(currentSortOrder == SortOrder.Transport ? "" : ""); 
+        Console.Write(_currentSortOrder == SortOrder.Transport ? "" : ""); 
         Console.Write("Машина      ");
-        Console.Write(currentSortOrder == SortOrder.Season ? "" : "");
+        Console.Write(_currentSortOrder == SortOrder.Season ? "" : "");
         Console.Write("Сезон     ");
-        Console.Write(currentSortOrder == SortOrder.Date ? "▴" : " ");
+        Console.Write(_currentSortOrder == SortOrder.Date ? "▴" : " ");
         Console.Write("Дата       ");
         Console.WriteLine(Vertical);
     }
@@ -127,7 +126,7 @@ class History
         DrawHeader();
         DrawMiddle();
 
-        foreach (HistoryRecord record in records)
+        foreach (HistoryRecord record in _records)
         {
             DrawRecord(record);
         }
@@ -152,17 +151,17 @@ class History
         switch (input?.Trim())
         {
             case "1":
-                currentSortOrder = SortOrder.Index; break;
+                _currentSortOrder = SortOrder.Index; break;
             case "2":
-                currentSortOrder = SortOrder.Distance; break;
+                _currentSortOrder = SortOrder.Distance; break;
             case "3":
-                currentSortOrder = SortOrder.Transport; break;
+                _currentSortOrder = SortOrder.Transport; break;
             case "4":
-                currentSortOrder = SortOrder.Season; break;
+                _currentSortOrder = SortOrder.Season; break;
             case "5":
-                currentSortOrder = SortOrder.Cost; break;
+                _currentSortOrder = SortOrder.Cost; break;
             case "6":
-                currentSortOrder = SortOrder.Date; break;
+                _currentSortOrder = SortOrder.Date; break;
             case "7":
                 return false;
             default:
@@ -180,7 +179,7 @@ class History
 
         bool continueLoop = true;
 
-        if (records.Count == 0)
+        if (_records.Count == 0)
         {
             continueLoop = false;
             Console.WriteLine("История пуста.");
