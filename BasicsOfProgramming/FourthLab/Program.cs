@@ -284,14 +284,17 @@ namespace Lab4Variant2
             Console.ReadKey();
         }
 
+/*
+        Код, который добавляется в 4 лабе
+*/
         const int BoardWidth = 10;
         const int BoardHeight = 20;
-        static int[,] board = new int[BoardWidth, BoardHeight]; 
+        static int[,] board = new int[BoardHeight, BoardWidth]; 
 
-        static ConsoleColor currentColor;
         static Random random = new Random();
 
         static int[,] currentPiece;
+        static int currentColor;
         static int currentX;
         static int currentY;
 
@@ -308,12 +311,35 @@ namespace Lab4Variant2
             new int[,] { {0,0,1}, {1,1,1} }
         };
 
+        static bool CheckCollision(int x, int y, int[,] piece)
+        {
+            for (int row = 0; row < piece.GetLength(0); row++)
+            {
+                for (int col = 0; col < piece.GetLength(1); col++)
+                {
+                    if (piece[row, col] == 1)
+                    {
+                        int boardX = x + col;
+                        int boardY = y + row;
+                        
+                        if (boardX < 0 || boardX >= BoardWidth || 
+                            boardY >= BoardHeight || 
+                            (boardY >= 0 && board[boardY, boardX] != 0))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
         static void SpawnPiece()
         {
             int pieceIndex = random.Next(Pieces.Length);
             currentPiece = (int[,])Pieces[pieceIndex].Clone();
-            currentColor = GetColor(pieceIndex + 1);
-            currentX = BoardWidth / 2;
+            currentColor = pieceIndex + 1;
+            currentX = BoardWidth / 2 - currentPiece.GetLength(1) / 2;
             currentY = 0;
             
             if (CheckCollision(currentX, currentY, currentPiece))
@@ -338,58 +364,28 @@ namespace Lab4Variant2
             }
         }
 
-        static bool CheckCollision(int x, int y, int[,] piece)
-        {
-            for (int row = 0; row < piece.GetLength(0); row++)
-            {
-                for (int column = 0; column < piece.GetLength(1); column++)
-                {
-                    if (piece[row, column] == 1)
-                    {
-                        boardX = currentX + row;
-                        boardY = currentY + column;
 
-                        if (currentX < 0 || currentX >= BoardWidth ||
-                            currentY >= BoardHeight ||
-                            (currentY >= 0 && board[boardY, boardX] != 0))
+        // Метод для отрисовки
+        static void Draw()
+        {
+            int[,] drawBoard = (int[,])board.Clone();
+
+            for (int row = 0; row < currentPiece.GetLength(0); row++)
+            {
+                for (int col = 0; col < currentPiece.GetLength(1); col++)
+                {
+                    if (currentPiece[row, col] == 1)
+                    {
+                        int y = currentY + row;
+                        int x = currentX + col;
+
+                        if (y >= 0 && y < BoardHeight && x >= 0 && x < BoardWidth)
                         {
-                            return true;
+                            drawBoard[y, x] = currentColor;
                         }
                     }
                 }
             }
-        }
-
-        static int[,] SpawnPiece()
-        {
-            Random random = new Random();
-            int pieceIndex = random.Next(Pieces.Length);
-            int[,] piece = (int[,])Pieces[pieceIndex].Clone();
-            currentColor = GetColor(pieceIndex + 1);
-            return piece;
-        }
-
-        // Метод для отрисовки
-        static void Draw(int[,] board)
-        {
-            int[,] drawBoard = (int[,])board.Clone();
-
-            // Добавляем текущую фигуру
-            // for (int row = 0; row < currentPiece.GetLength(0); row++)
-            // {
-            //     for (int col = 0; col < currentPiece.GetLength(1); col++)
-            //     {
-            //         if (currentPiece[row, col] == 1)
-            //         {
-            //             int y = currentY + row;
-            //             int x = currentX + col;
-            //             if (y >= 0 && y < BoardHeight && x >= 0 && x < BoardWidth)
-            //             {
-            //                 displayBoard[y, x] = currentColor;
-            //             }
-            //         }
-            //     }
-            // }
 
             
             // Рисуем верхнюю границу
@@ -424,16 +420,31 @@ namespace Lab4Variant2
             Console.WriteLine("╝");
         }
 
+        static void RotatePiece()
+        {
+            for (int row = 0; row < currentPiece.GetLength(0); row++)
+            {
+                for (int col = 0; col < currentPiece.GetLength(1); col++)
+                {
+                    currentPiece[row, col] = currentPiece[col, row];
+                }
+            }
+        }
+
         static void PlacePiece()
         {
             for (int row = 0; row < BoardWidth; row++)
             {
                 for (int column = 0; column < BoardHeight; column++)
                 {
-                    if ()
-                    {}
+                    if (!CheckCollision(currentX, currentY + 1, currentPiece))
+                    {
+                        
+                    }
                 }
             }
+
+            SpawnPiece();
         }
 
         // Обработка ввода
@@ -451,7 +462,7 @@ namespace Lab4Variant2
                         case ConsoleKey.A:
                             if (!CheckCollision(currentX, currentY + 1, currentPiece))
                             {
-                                Move(currentX - 1);
+                                currentX--;
                             }
                             break;
 
@@ -467,7 +478,7 @@ namespace Lab4Variant2
                         case ConsoleKey.D:
                             if (!CheckCollision(currentX, currentY + 1, currentPiece))
                             {
-                                Move(currentX + 1);
+                                currentX++;
                             }
                             break;
 
@@ -495,17 +506,26 @@ namespace Lab4Variant2
         // Метод, вызываемый из меню (точка входа всех методов для тетриса)
         static void Tetris()
         {
-
             Console.Clear();
 
+            SpawnPiece();
+
             Thread inputThread = new Thread(HandleInput);
+            inputThread.Start();
 
             bool gameOver = false;
             while (!gameOver)
             {
-                Console.Clear();
-                Draw(board);
-                Thread.Sleep(1000);
+                if (!CheckCollision(currentX, currentY + 1, currentPiece))
+                {
+                    currentY++;
+                }
+                else
+                {
+                    PlacePiece();
+                }
+                Draw();
+                Thread.Sleep(16);
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
@@ -567,9 +587,6 @@ namespace Lab4Variant2
             Console.Write("Ваш выбор: ");
         }
 
-        /// <summary>
-        /// Основное меню
-        /// </summary>
         // Меню с выбором
         static bool Menu()
         {
