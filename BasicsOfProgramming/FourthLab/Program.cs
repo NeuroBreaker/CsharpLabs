@@ -348,7 +348,6 @@ namespace Lab4Variant2
             }
         }
 
-        // Метод для получения цвета
         static ConsoleColor GetColor(int colorNum)
         {
             switch (colorNum)
@@ -364,8 +363,6 @@ namespace Lab4Variant2
             }
         }
 
-
-        // Метод для отрисовки
         static void Draw()
         {
             int[,] drawBoard = (int[,])board.Clone();
@@ -420,15 +417,21 @@ namespace Lab4Variant2
             Console.WriteLine("╝");
         }
 
-        static void RotatePiece()
+        static int[,] RotatedPiece(int[,] piece)
         {
-            for (int row = 0; row < currentPiece.GetLength(0); row++)
+            int rows = piece.GetLength(0);
+            int columns = piece.GetLength(1);
+            int[,] rotatedPiece = new int[columns, rows];
+
+            for (int row = 0; row < rows; row++)
             {
-                for (int col = 0; col < currentPiece.GetLength(1); col++)
+                for (int col = 0; col < columns; col++)
                 {
-                    currentPiece[row, col] = currentPiece[col, row];
+                    rotatedPiece[col, row] = piece[row, col];
                 }
             }
+
+            return rotatedPiece;
         }
 
         static void PlacePiece()
@@ -470,7 +473,8 @@ namespace Lab4Variant2
                         case ConsoleKey.W:
                             if (!CheckCollision(currentX, currentY, currentPiece))
                             {
-                                RotatePiece();
+                                int[,] rotated = RotatedPiece(currentPiece);
+                                currentPiece = rotated;
                             }
                             break;
 
@@ -513,8 +517,7 @@ namespace Lab4Variant2
             Thread inputThread = new Thread(HandleInput);
             inputThread.Start();
 
-            bool gameOver = false;
-            while (!gameOver)
+            while (!GameOver)
             {
                 if (!CheckCollision(currentX, currentY + 1, currentPiece))
                 {
@@ -525,7 +528,7 @@ namespace Lab4Variant2
                     PlacePiece();
                 }
                 Draw();
-                Thread.Sleep(16);
+                Thread.Sleep(500);
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
