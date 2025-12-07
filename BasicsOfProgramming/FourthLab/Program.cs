@@ -427,7 +427,7 @@ namespace Lab4Variant2
             {
                 for (int col = 0; col < columns; col++)
                 {
-                    rotatedPiece[col, row] = piece[row, col];
+                    rotatedPiece[col, rows - 1 - row] = piece[row, col];
                 }
             }
 
@@ -503,7 +503,23 @@ namespace Lab4Variant2
                             break;
                     }
                 }
-                Thread.Sleep(16);
+                Thread.Sleep(10);
+            }
+        }
+
+        static void DropHandler()
+        {
+            while (!GameOver)
+            {
+                if (!CheckCollision(currentX, currentY + 1, currentPiece))
+                {
+                    currentY++;
+                }
+                else
+                {
+                    PlacePiece();
+                }
+                Thread.Sleep(250);
             }
         }
 
@@ -517,18 +533,13 @@ namespace Lab4Variant2
             Thread inputThread = new Thread(HandleInput);
             inputThread.Start();
 
+            Thread dropThread = new Thread(DropHandler);
+            dropThread.Start();
+
             while (!GameOver)
             {
-                if (!CheckCollision(currentX, currentY + 1, currentPiece))
-                {
-                    currentY++;
-                }
-                else
-                {
-                    PlacePiece();
-                }
                 Draw();
-                Thread.Sleep(500);
+                Thread.Sleep(50);
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
