@@ -284,9 +284,6 @@ namespace Lab4Variant2
             Console.ReadKey();
         }
 
-/*
-        Код, который добавляется в 4 лабе
-*/
         const int BoardWidth = 10;
         const int BoardHeight = 20;
         static int[,] board = new int[BoardHeight, BoardWidth]; 
@@ -363,6 +360,17 @@ namespace Lab4Variant2
             }
         }
 
+        static void DrawHorizontal(char left, char right)
+        {
+            Console.Write(left);
+            for (int i = 0; i < board.GetLength(1) * 2; i++)
+                Console.Write('═');
+            Console.WriteLine(right);
+        }
+
+        static void DrawTop() => DrawHorizontal('╔', '╗');
+        static void DrawBottom() => DrawHorizontal('╚', '╝');
+
         static void Draw()
         {
             int[,] drawBoard = (int[,])board.Clone();
@@ -384,16 +392,12 @@ namespace Lab4Variant2
                 }
             }
 
-            
-            // Рисуем верхнюю границу
-            Console.Write("╔");
-            for (int i = 0; i < board.GetLength(1) * 2; i++) Console.Write("═");
-            Console.WriteLine("╗");
+            DrawTop();            
             
             // Рисуем поле
             for (int row = 0; row < board.GetLength(0); row++)
             {
-                Console.Write("║");
+                Console.Write('║');
                 for (int col = 0; col < board.GetLength(1); col++)
                 {
                     int cell = drawBoard[row, col];
@@ -408,13 +412,10 @@ namespace Lab4Variant2
                         Console.ResetColor();
                     }
                 }
-                Console.WriteLine("║");
+                Console.WriteLine('║');
             }
 
-            // Рисуем нижнюю границу
-            Console.Write("╚");
-            for (int i = 0; i < board.GetLength(1) * 2; i++) Console.Write("═");
-            Console.WriteLine("╝");
+            DrawBottom();
         }
 
         static int[,] RotatedPiece(int[,] piece)
@@ -434,6 +435,10 @@ namespace Lab4Variant2
             return rotatedPiece;
         }
 
+        static void ClearLines()
+        {
+        }
+
         static void PlacePiece()
         {
             for (int row = 0; row < BoardWidth; row++)
@@ -442,7 +447,6 @@ namespace Lab4Variant2
                 {
                     if (!CheckCollision(currentX, currentY + 1, currentPiece))
                     {
-                        
                     }
                 }
             }
