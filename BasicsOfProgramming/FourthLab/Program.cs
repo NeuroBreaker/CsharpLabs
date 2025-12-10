@@ -285,7 +285,7 @@ namespace Lab4Variant2
         }
 
         const int BoardWidth = 10;
-        const int BoardHeight = 20;
+        const int BoardHeight = 10;
         static int[,] board = new int[BoardHeight, BoardWidth]; 
 
         static Random random = new Random();
@@ -337,7 +337,7 @@ namespace Lab4Variant2
             currentPiece = (int[,])Pieces[pieceIndex].Clone();
             currentColor = pieceIndex + 1;
             currentX = BoardWidth / 2 - currentPiece.GetLength(1) / 2;
-            currentY = 0;
+            currentY = -1;
             
             if (CheckCollision(currentX, currentY, currentPiece))
             {
@@ -373,6 +373,7 @@ namespace Lab4Variant2
 
         static void Draw()
         {
+            Console.Clear();
             int[,] drawBoard = (int[,])board.Clone();
 
             for (int row = 0; row < currentPiece.GetLength(0); row++)
@@ -526,9 +527,9 @@ namespace Lab4Variant2
 
                         case ConsoleKey.UpArrow:
                         case ConsoleKey.W:
-                            if (!CheckCollision(currentX, currentY, currentPiece))
+                            int[,] rotated = RotatedPiece(currentPiece);
+                            if (!CheckCollision(currentX, currentY, rotated))
                             {
-                                int[,] rotated = RotatedPiece(currentPiece);
                                 currentPiece = rotated;
                             }
                             break;
@@ -551,7 +552,7 @@ namespace Lab4Variant2
                             break;
                     }
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(16);
             }
         }
 
@@ -567,8 +568,15 @@ namespace Lab4Variant2
                 {
                     PlacePiece();
                 }
-                Thread.Sleep(250);
+                Thread.Sleep(750);
             }
+        }
+
+        static void NewGame()
+        {
+            GameOver = false;
+            board = new int[BoardHeight, BoardWidth];
+            Score = 0;
         }
 
         // Метод, вызываемый из меню (точка входа всех методов для тетриса)
@@ -576,7 +584,7 @@ namespace Lab4Variant2
         {
             Console.Clear();
 
-            GameOver = false;
+            NewGame();
             SpawnPiece();
 
             Thread inputThread = new Thread(HandleInput);
@@ -588,7 +596,7 @@ namespace Lab4Variant2
             while (!GameOver)
             {
                 Draw();
-                Thread.Sleep(50);
+                Thread.Sleep(16);
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
