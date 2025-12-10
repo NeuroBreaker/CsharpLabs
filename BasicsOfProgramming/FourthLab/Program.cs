@@ -416,6 +416,14 @@ namespace Lab4Variant2
             }
 
             DrawBottom();
+
+            Console.WriteLine($"\n  Счёт: {Score}");
+            Console.WriteLine("\n  Управление:");
+            Console.WriteLine("  ← → или A D - движение");
+            Console.WriteLine("  ↑ или W - поворот");
+            Console.WriteLine("  ↓ или S - ускорить");
+            Console.WriteLine("  Пробел - сброс");
+            Console.WriteLine("  Esc - выход");
         }
 
         static int[,] RotatedPiece(int[,] piece)
@@ -437,20 +445,55 @@ namespace Lab4Variant2
 
         static void ClearLines()
         {
+            int linesCleared = 0;
+
+            for (int row = BoardHeight - 1; row >= 0; row--)
+            {
+                bool fullLine = true;
+
+                for (int col = 0; col < BoardWidth; col++)
+                {
+                    if (board[row, col] == 0)
+                    {
+                        fullLine = false;
+                        break;
+                    }
+                }
+
+                if (fullLine)
+                {
+                    linesCleared++;
+                    for (int r = row; r > 0; r--)
+                    {
+                        for (int c = 0; c < BoardWidth; c++)
+                        {
+                            board[r, c] = board[r - 1, c];
+                        }
+                    }
+                    row++;
+                }
+            }
+
+            if (linesCleared > 0)
+            {
+                Score += linesCleared * linesCleared * 100;
+            }
         }
 
         static void PlacePiece()
         {
-            for (int row = 0; row < BoardWidth; row++)
+            for (int row = 0; row < currentPiece.GetLength(0); row++)
             {
-                for (int column = 0; column < BoardHeight; column++)
+                for (int column = 0; column < currentPiece.GetLength(1); column++)
                 {
-                    if (!CheckCollision(currentX, currentY + 1, currentPiece))
+                    if (currentPiece[row, column] == 1 && currentY + row >= 0)
                     {
+                        board[currentY + row, currentX + column] = currentColor;
                     }
                 }
             }
 
+            ClearLines();
             SpawnPiece();
         }
 
@@ -467,9 +510,17 @@ namespace Lab4Variant2
                     {
                         case ConsoleKey.LeftArrow:
                         case ConsoleKey.A:
-                            if (!CheckCollision(currentX, currentY + 1, currentPiece))
+                            if (!CheckCollision(currentX - 1, currentY, currentPiece))
                             {
                                 currentX--;
+                            }
+                            break;
+
+                        case ConsoleKey.RightArrow:
+                        case ConsoleKey.D:
+                            if (!CheckCollision(currentX + 1, currentY, currentPiece))
+                            {
+                                currentX++;
                             }
                             break;
 
@@ -479,14 +530,6 @@ namespace Lab4Variant2
                             {
                                 int[,] rotated = RotatedPiece(currentPiece);
                                 currentPiece = rotated;
-                            }
-                            break;
-
-                        case ConsoleKey.RightArrow:
-                        case ConsoleKey.D:
-                            if (!CheckCollision(currentX, currentY + 1, currentPiece))
-                            {
-                                currentX++;
                             }
                             break;
 
@@ -500,6 +543,7 @@ namespace Lab4Variant2
                         case ConsoleKey.Enter:
                             while (!CheckCollision(currentX, currentY + 1, currentPiece))
                                 currentY++;
+                            PlacePiece();
                             break;
 
                         case ConsoleKey.Escape:
@@ -532,6 +576,7 @@ namespace Lab4Variant2
         {
             Console.Clear();
 
+            GameOver = false;
             SpawnPiece();
 
             Thread inputThread = new Thread(HandleInput);
