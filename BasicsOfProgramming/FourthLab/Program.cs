@@ -515,6 +515,7 @@ namespace Lab4Variant2
                             {
                                 currentX--;
                             }
+                            Draw();
                             break;
 
                         case ConsoleKey.RightArrow:
@@ -523,6 +524,7 @@ namespace Lab4Variant2
                             {
                                 currentX++;
                             }
+                            Draw();
                             break;
 
                         case ConsoleKey.UpArrow:
@@ -532,12 +534,14 @@ namespace Lab4Variant2
                             {
                                 currentPiece = rotated;
                             }
+                            Draw();
                             break;
 
                         case ConsoleKey.DownArrow:
                         case ConsoleKey.S:
                             if (!CheckCollision(currentX, currentY + 1, currentPiece))
                                 currentY++;
+                            Draw();
                             break;
 
                         case ConsoleKey.Spacebar:
@@ -545,6 +549,7 @@ namespace Lab4Variant2
                             while (!CheckCollision(currentX, currentY + 1, currentPiece))
                                 currentY++;
                             PlacePiece();
+                            Draw();
                             break;
 
                         case ConsoleKey.Escape:
@@ -553,22 +558,6 @@ namespace Lab4Variant2
                     }
                 }
                 Thread.Sleep(16);
-            }
-        }
-
-        static void DropHandler()
-        {
-            while (!GameOver)
-            {
-                if (!CheckCollision(currentX, currentY + 1, currentPiece))
-                {
-                    currentY++;
-                }
-                else
-                {
-                    PlacePiece();
-                }
-                Thread.Sleep(750);
             }
         }
 
@@ -590,13 +579,18 @@ namespace Lab4Variant2
             Thread inputThread = new Thread(HandleInput);
             inputThread.Start();
 
-            Thread dropThread = new Thread(DropHandler);
-            dropThread.Start();
-
             while (!GameOver)
             {
+                if (!CheckCollision(currentX, currentY + 1, currentPiece))
+                {
+                    currentY++;
+                }
+                else
+                {
+                    PlacePiece();
+                }
                 Draw();
-                Thread.Sleep(16);
+                Thread.Sleep(750);
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
