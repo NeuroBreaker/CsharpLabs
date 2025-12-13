@@ -119,8 +119,8 @@ namespace Lab4Variant2
         static void AboutAuthor()
         {
             Console.Clear();
-            Console.WriteLine("Сделал Anon Anonovich");
-            Console.WriteLine("группа ananisti");
+            Console.WriteLine("Сделал Рахматулин Родион");
+            Console.WriteLine("группа 6105-090301D");
             Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
