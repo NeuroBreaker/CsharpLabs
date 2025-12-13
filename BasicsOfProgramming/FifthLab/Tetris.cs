@@ -10,21 +10,21 @@ namespace FifthLab.Tetris
     class TetrisGame
     {
 
-        const int BoardWidth = 10;
-        const int BoardHeight = 10;
-        int[,] board = new int[BoardHeight, BoardWidth]; 
+        private const int BoardWidth = 10;
+        private const int BoardHeight = 10;
+        private int[,] board = new int[BoardHeight, BoardWidth]; 
 
         Random random = new Random();
 
-        int[,]? _currentPiece;
-        int _currentColor;
-        int _currentX;
-        int _currentY;
+        private int[,]? _currentPiece;
+        private int _currentColor;
+        private int _currentX;
+        private int _currentY;
 
-        bool _gameOver = false;
-        int _score = 0;
+        private bool _gameOver = false;
+        private int _score = 0;
 
-        int[][,] Pieces = {
+        private int[][,] Pieces = {
             new int[,] { {1,1,1,1} },
             new int[,] { {1,1}, {1,1} },
             new int[,] { {0,1,0}, {1,1,1} },
@@ -34,7 +34,7 @@ namespace FifthLab.Tetris
             new int[,] { {0,0,1}, {1,1,1} }
         };
 
-        bool CheckCollision(int x, int y, int[,] piece)
+        private bool CheckCollision(int x, int y, int[,] piece)
         {
             for (int row = 0; row < piece.GetLength(0); row++)
             {
@@ -57,7 +57,7 @@ namespace FifthLab.Tetris
             return false;
         }
 
-        void SpawnPiece()
+        private void SpawnPiece()
         {
             int pieceIndex = random.Next(Pieces.Length);
             _currentPiece = (int[,])Pieces[pieceIndex].Clone();
@@ -86,7 +86,7 @@ namespace FifthLab.Tetris
             }
         }
 
-        void DrawHorizontal(char left, char right)
+        private void DrawHorizontal(char left, char right)
         {
             Console.Write(left);
             for (int i = 0; i < board.GetLength(1) * 2; i++)
@@ -94,10 +94,10 @@ namespace FifthLab.Tetris
             Console.WriteLine(right);
         }
 
-        void DrawTop() => DrawHorizontal('╔', '╗');
-        void DrawBottom() => DrawHorizontal('╚', '╝');
+        private void DrawTop() => DrawHorizontal('╔', '╗');
+        private void DrawBottom() => DrawHorizontal('╚', '╝');
 
-        void Draw()
+        private void Draw()
         {
             Console.Clear();
             int[,] drawBoard = (int[,])board.Clone();
@@ -156,7 +156,7 @@ namespace FifthLab.Tetris
             Console.WriteLine("  Esc - выход");
         }
 
-        int[,] RotatedPiece(int[,] piece)
+        private int[,] RotatedPiece(int[,] piece)
         {
             int rows = piece.GetLength(0);
             int columns = piece.GetLength(1);
@@ -173,7 +173,7 @@ namespace FifthLab.Tetris
             return rotatedPiece;
         }
 
-        void ClearLines()
+        private void ClearLines()
         {
             int linesCleared = 0;
 
@@ -210,7 +210,7 @@ namespace FifthLab.Tetris
             }
         }
 
-        void PlacePiece()
+        private void PlacePiece()
         {
             if (_currentPiece is null) return;
 
@@ -230,7 +230,7 @@ namespace FifthLab.Tetris
         }
 
         // Обработка ввода
-        void HandleInput()
+        private void HandleInput()
         {
             while (!_gameOver)
             {
@@ -294,7 +294,7 @@ namespace FifthLab.Tetris
             }
         }
 
-        void NewGame()
+        private void NewGame()
         {
             _gameOver = false;
             board = new int[BoardHeight, BoardWidth];

@@ -11,7 +11,7 @@ namespace FifthLab.Guess
     {
 
         // Часть кода из первой лабораторной работы
-        static double CalculateMethod(double a, double b)
+        private static double CalculateMethod(double a, double b)
         {
             const double PI = Math.PI;
 
@@ -22,7 +22,7 @@ namespace FifthLab.Guess
 
         // Запрашивает ответ 3 раза, если
         // ответ верный, то цикл прервётся
-        static void Guess(double result)
+        private static void Guess(double result)
         {
 
             for (int i = 3; i > 0; i--) 

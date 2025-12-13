@@ -9,8 +9,8 @@ namespace FifthLab.ArrayUtils
     /// </summary>
     class ArraySorter {
 
-        int _size;
-        int[] _array;
+        private int _size;
+        private int[] _array;
 
         public ArraySorter() : this(10) {}
 
@@ -21,7 +21,7 @@ namespace FifthLab.ArrayUtils
         }
 
         // Заполнение массива случайными значениями
-        void FillArray()
+        private void FillArray()
         {
             
             Random rnd = new Random();
@@ -33,7 +33,7 @@ namespace FifthLab.ArrayUtils
         }
 
         // Возвращает клон передаваемого массива
-        int[] CloneArray(int[] array)
+        private int[] CloneArray(int[] array)
         {
             int size = array.Length;
             int[] cloneArray = new int[size];
@@ -45,8 +45,10 @@ namespace FifthLab.ArrayUtils
             return cloneArray;
         }
 
-        // Вывод массива в консоль
-        void OutputArray(int[] array)
+        /// <summary>
+        /// Вывод массива в консоль
+        /// </summary>
+        public void OutputArray(int[] array)
         {
             int size = array.Length;
             if (size > 10)
@@ -64,7 +66,7 @@ namespace FifthLab.ArrayUtils
         }
 
         // Создаёт клон передаваемого массива, сортирует его методом пузырька и после возвращает
-        int[] BubbleSorting(int[] array)
+        private int[] BubbleSorting(int[] array)
         {
             int size = array.Length;
             int[] sortingArray = CloneArray(array);
@@ -84,7 +86,7 @@ namespace FifthLab.ArrayUtils
         }
         
         // Создаёт клон передаваемого массива, сортирует его методом вставок и после возвращает
-        int[] InsertSorting(int[] array)
+        private int[] InsertSorting(int[] array)
         {
             int size = array.Length;
             int[] sortingArray = CloneArray(array);
