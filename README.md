@@ -13,6 +13,7 @@
 |                               | SecondLab              |                             |                  |
 |                               | ThirdLab               |                             |                  |
 |                               | FourthLab              |                             |                  |
+|                               | FifthLab               |                             |                  |
 |                               |                        |                             |                  |
 | Практикум по программированию | FirstLab               |                             |                  |
 |                               | SecondLab              |                             | ThirdLab         |
