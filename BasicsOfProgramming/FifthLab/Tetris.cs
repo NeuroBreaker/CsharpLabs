@@ -16,7 +16,7 @@ namespace FifthLab.Tetris
 
         Random random = new Random();
 
-        int[,] _currentPiece;
+        int[,]? _currentPiece;
         int _currentColor;
         int _currentX;
         int _currentY;
@@ -101,6 +101,9 @@ namespace FifthLab.Tetris
         {
             Console.Clear();
             int[,] drawBoard = (int[,])board.Clone();
+
+            if (_currentPiece == null) return;
+
 
             for (int row = 0; row < _currentPiece.GetLength(0); row++)
             {
@@ -209,6 +212,8 @@ namespace FifthLab.Tetris
 
         void PlacePiece()
         {
+            if (_currentPiece is null) return;
+
             for (int row = 0; row < _currentPiece.GetLength(0); row++)
             {
                 for (int column = 0; column < _currentPiece.GetLength(1); column++)
@@ -232,6 +237,8 @@ namespace FifthLab.Tetris
                 if (Console.KeyAvailable)
                 {
                     ConsoleKey key = Console.ReadKey(true).Key;
+
+                    if (_currentPiece == null) continue;
 
                     switch (key)
                     {
@@ -307,8 +314,11 @@ namespace FifthLab.Tetris
             Thread inputThread = new Thread(HandleInput);
             inputThread.Start();
 
+
+
             while (!_gameOver)
             {
+                if (_currentPiece == null) continue;
                 if (!CheckCollision(_currentX, _currentY + 1, _currentPiece))
                 {
                     _currentY++;

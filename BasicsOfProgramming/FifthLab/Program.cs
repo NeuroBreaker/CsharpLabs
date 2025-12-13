@@ -13,18 +13,17 @@ namespace FifthLab
     class Program
     {
     
+        static TetrisGame? tetris;
 
         // Об авторе (вызывается из меню)
         static void AboutAuthor()
         {
             Console.Clear();
-            Console.WriteLine("Сделал Anon Anonovich");
-            Console.WriteLine("группа ananisti");
+            Console.WriteLine("Сделал Рахматулин Родион");
+            Console.WriteLine("группа 6105-090301D");
             Console.WriteLine("\nВведите любую клавишу для продолжения ... ");
             Console.ReadKey();
         }
-    
-
     
         // Вывод меню в консоль
         static void ShowMenu() 
@@ -56,13 +55,24 @@ namespace FifthLab
                     break;
 
                 case "3":
-                    Arrays arrays = new Arrays();
-                    arrays.ArraysSorting();
+                    // Пример использования конструктора без параметров
+                    ArraySorter arraySorter0 = new ArraySorter();
+                    arraySorter0.ArraysSorting();
+
+                    Console.Clear();
+
+                    // Пример использования конструктора с параметрами
+                    int size = InputHelper.GetArraySize();
+                    ArraySorter arraySorter1 = new ArraySorter(size);
+                    arraySorter1.ArraysSorting();
+
                     break;
     
                 case "4":
-                    TetrisGame tetris = new TetrisGame();
-                    tetris.Tetris();
+                    if (tetris is null)
+                        tetris = new TetrisGame();
+
+                    tetris?.Tetris();
                     break;
 
                 case "5":

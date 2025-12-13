@@ -42,6 +42,24 @@ namespace FifthLab.Utils
 
             return result;
         }
+
+        /// <summary>
+        /// Запрашивает размер массива, возвращает его
+        /// </summary>
+        public static int GetArraySize()
+        {
+            int result;
+            string message = "Выберите размер для массива: ";
+            string? input;
+
+            do {
+                Console.Write(message);
+                input = Console.ReadLine();
+            }
+            while (!int.TryParse(input, out result) && result < 1);
+
+            return result;
+        }
     }
 
     /// <summary>
@@ -50,7 +68,6 @@ namespace FifthLab.Utils
     /// </summary>
     class BoolHandler
     {
-
 
         /// <summary>
         /// Спрашивает хотите ли выйти до того момента

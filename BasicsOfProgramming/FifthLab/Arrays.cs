@@ -1,63 +1,35 @@
 using System;
 using System.Diagnostics;
 
-using FifthLab.Utils;
-
 namespace FifthLab.ArrayUtils
 {
     
     /// <summary>
     /// Класс со всеми методами для сортировок массива
     /// </summary>
-    class Arrays {
+    class ArraySorter {
 
         int _size;
-        int[,] _array;
+        int[] _array;
 
-        public Arrays()
+        public ArraySorter() : this(10) {}
+
+        public ArraySorter(int size)
         {
-            _size = 10;                        
-        }
-
-        // Запрашивает размер массива, возвращает его
-        int InputArraySize()
-        {
-            int arraySize;
-            do {
-                arraySize = InputHelper.GetInt("Выберите размер для массива: ");
-
-                if (arraySize < 1)
-                {
-                    Console.WriteLine("Массив не может состоять из 0 и меньше элементов");
-                }
-            }
-            while(arraySize < 1);
-
-            return arraySize;
+            this._size = size;
+            this._array = new int[_size];
         }
 
         // Заполнение массива случайными значениями
-        int[] FillArray(int[] array)
+        void FillArray()
         {
             
             Random rnd = new Random();
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < _array.Length; i++)
             {
                 int num = rnd.Next(-9, 9);
-                array[i] = num;
+                _array[i] = num;
             }
-
-            return array;
-        }
-
-        // При вызове этого метода указывается размер создаваемого массива
-        // После этого он заполняется методом FillArray
-        int[] ArrayInitialization(int size)
-        {
-            int[] array = new int[size];
-            FillArray(array);
-
-            return array;
         }
 
         // Возвращает клон передаваемого массива
@@ -140,15 +112,13 @@ namespace FifthLab.ArrayUtils
 
             Console.WriteLine("Добро пожаловать в метод сравнения сортировок массива");
 
-            int arraySize = InputArraySize();
-            int[] array = ArrayInitialization(arraySize);
-
             Console.WriteLine("Неотсортированный массив:");
-            OutputArray(array);
+            FillArray();
+            OutputArray(_array);
 
             Stopwatch stopwatchBubble = new Stopwatch();
             stopwatchBubble.Start();
-            int[] bubbleSortingArray = BubbleSorting(array);
+            int[] bubbleSortingArray = BubbleSorting(_array);
             stopwatchBubble.Stop();
 
             Console.WriteLine($"\nВремя выполнения сортировки пузырьком: {stopwatchBubble.ElapsedMilliseconds} миллисекунд");
@@ -157,7 +127,7 @@ namespace FifthLab.ArrayUtils
 
             Stopwatch stopwatchInsert = new Stopwatch();
             stopwatchInsert.Start();
-            int[] insertSortingArray = InsertSorting(array);
+            int[] insertSortingArray = InsertSorting(_array);
             stopwatchInsert.Stop();
 
             Console.WriteLine($"\nВремя выполнения сортировки вставками: {stopwatchInsert.ElapsedMilliseconds} миллисекунд");
@@ -176,7 +146,7 @@ namespace FifthLab.ArrayUtils
             }
 
 
-            Console.WriteLine("\nНажмите Enter, чтобы вернуться в меню...");
+            Console.WriteLine("\nВведите Enter для продолжения ...");
             Console.ReadKey();
         }
     }
